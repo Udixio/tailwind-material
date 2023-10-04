@@ -47,6 +47,10 @@
       "limit": "10 KB"
     }
   ],
+  "dependencies": {
+    "@material/material-color-utilities": "^0.2.7",
+    "color": "^4.2.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/plugin-syntax-flow": "^7.14.5",
@@ -69,8 +73,7 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "@material/material-color-utilities": "^0.2.7",
-    "color": "^4.2.3",
-    "tailwindcss": "^3.3.3"
+
+    "tailwindcss": ">=3.0.0"
   }
 }
