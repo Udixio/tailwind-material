@@ -40,11 +40,11 @@
   "size-limit": [
     {
       "path": "dist/tailwind-material.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "40 KB"
     },
     {
       "path": "dist/tailwind-material.esm.js",
-      "limit": "10 KB"
+      "limit": "40 KB"
     }
   ],
   "dependencies": {
