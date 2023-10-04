@@ -1,6 +1,7 @@
 {
+
   "name": "@udixio/tailwind-material",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0-beta.2",
   "license": "MIT",
   "author": "Joël",
   "main": "dist/index.js",
@@ -11,6 +12,9 @@
     "src"
   ],
   "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "analyze": "size-limit --why",
     "build": "dts build",

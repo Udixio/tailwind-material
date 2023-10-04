@@ -16,7 +16,4 @@ module.exports = {
 
     '@semantic-release/git',
   ],
-  publishConfig: {
-    access: 'public',
-  },
 };
