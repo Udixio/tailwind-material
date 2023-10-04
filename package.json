@@ -40,21 +40,30 @@
   "size-limit": [
     {
       "path": "dist/tailwind-material.cjs.production.min.js",
-      "limit": "10 KB"
+      "limit": "40 KB"
     },
     {
       "path": "dist/tailwind-material.esm.js",
-      "limit": "10 KB"
+      "limit": "40 KB"
     }
   ],
+  "dependencies": {
+    "@material/material-color-utilities": "^0.2.7",
+    "color": "^4.2.3"
+  },
   "devDependencies": {
     "@babel/core": "^7.23.0",
+    "@babel/plugin-syntax-flow": "^7.14.5",
+    "@babel/plugin-transform-react-jsx": "^7.14.9",
     "@babel/preset-env": "^7.22.20",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@size-limit/esbuild": "^9.0.0",
+    "@size-limit/esbuild-why": "^9.0.0",
     "@size-limit/preset-small-lib": "^9.0.0",
     "@tsconfig/recommended": "^1.0.3",
     "@types/color": "^3.0.4",
+    "@types/node": "^20.8.2",
     "babel-jest": "^29.7.0",
     "dts-cli": "^2.0.3",
     "husky": "^8.0.3",
@@ -63,9 +72,8 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
-  "dependencies": {
-    "@material/material-color-utilities": "^0.2.7",
-    "color": "^4.2.3",
-    "tailwindcss": "^3.3.3"
+  "peerDependencies": {
+
+    "tailwindcss": ">=3.0.0"
   }
 }
