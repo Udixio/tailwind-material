@@ -1,13 +1,13 @@
 // from tailwindcss src/util/flattenColorPalette
-import plugin from "tailwindcss/plugin";
+import plugin from 'tailwindcss/plugin';
 
 const flattenColorPalette = (colors: any): any =>
   Object.assign(
     {},
     ...Object.entries(colors ?? {}).flatMap(([color, values]) =>
-      typeof values == "object"
+      typeof values == 'object'
         ? Object.entries(flattenColorPalette(values)).map(([number, hex]) => ({
-            [color + (number === "DEFAULT" ? "" : `-${number}`)]: hex,
+            [color + (number === 'DEFAULT' ? '' : `-${number}`)]: hex,
           }))
         : [{ [`${color}`]: values }]
     )
@@ -15,7 +15,7 @@ const flattenColorPalette = (colors: any): any =>
 
 export function materialStates() {
   const { statePrefix, disabledStyles, transition } = {
-    statePrefix: "state",
+    statePrefix: 'state',
     disabledStyles: {
       textOpacity: 0.38,
       backgroundOpacity: 0.12,
@@ -27,7 +27,7 @@ export function materialStates() {
 
   return {
     plugin: plugin(({ addComponents, theme }) => {
-      const colors = flattenColorPalette(theme("colors") || {});
+      const colors = flattenColorPalette(theme('colors') || {});
 
       const materialColors = Object.keys(colors).filter(
         (colorName) => colors[`${colorName}-light`]
