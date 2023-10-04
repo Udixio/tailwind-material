@@ -33,7 +33,6 @@
   "jest": {
     "testEnvironment": "node"
   },
-  "peerDependencies": {},
   "engines": {
     "node": ">=12"
   },
@@ -46,5 +45,23 @@
       "path": "dist/tailwind-material.esm.js",
       "limit": "10 KB"
     }
-  ]
+  ],
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.22.20",
+    "@size-limit/preset-small-lib": "^9.0.0",
+    "@tsconfig/recommended": "^1.0.3",
+    "@types/color": "^3.0.4",
+    "babel-jest": "^29.7.0",
+    "dts-cli": "^2.0.3",
+    "husky": "^8.0.3",
+    "size-limit": "^9.0.0",
+    "tslib": "^2.6.2",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "@material/material-color-utilities": "^0.2.7",
+    "color": "^4.2.3",
+    "tailwindcss": "^3.3.3"
+  }
 }
