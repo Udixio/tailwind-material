@@ -1,3 +1,10 @@
+# [1.0.0-beta.3](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.2...v1.0.0-beta.3) (2023-10-04)
+
+
+### Features
+
+* Change name and contents of tailwind-material package ([c9b24e9](https://github.com/Udixio/tailwind-material/commit/c9b24e9c1c014a8fa5bdc959b34b7163213198f6))
+
 # [1.0.0-beta.2](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.1...v1.0.0-beta.2) (2023-10-04)
 
 
