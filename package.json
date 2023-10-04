@@ -17,7 +17,8 @@
     "prepare": "dts build",
     "size": "size-limit",
     "start": "dts watch",
-    "test": "dts test"
+    "test": "dts test",
+    "semantic-release": "semantic-release"
   },
   "husky": {
     "hooks": {
@@ -49,12 +50,15 @@
   "devDependencies": {
     "@babel/core": "^7.23.0",
     "@babel/preset-env": "^7.22.20",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/git": "^10.0.1",
     "@size-limit/preset-small-lib": "^9.0.0",
     "@tsconfig/recommended": "^1.0.3",
     "@types/color": "^3.0.4",
     "babel-jest": "^29.7.0",
     "dts-cli": "^2.0.3",
     "husky": "^8.0.3",
+    "semantic-release": "^22.0.5",
     "size-limit": "^9.0.0",
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
