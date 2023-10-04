@@ -1,6 +1,6 @@
 {
-  "name": "tailwind-material",
-  "version": "0.1.0",
+  "name": "@udixio/tailwind-material",
+  "version": "1.0.0-beta.3",
   "license": "MIT",
   "author": "Joël",
   "main": "dist/index.js",
@@ -10,6 +10,7 @@
     "dist",
     "src"
   ],
+  "private": false,
   "scripts": {
     "analyze": "size-limit --why",
     "build": "dts build",
@@ -73,7 +74,6 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-
     "tailwindcss": ">=3.0.0"
   }
 }
