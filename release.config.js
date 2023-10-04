@@ -13,6 +13,10 @@ module.exports = {
         assets: ['dist/**', '*.tgz'],
       },
     ],
+
     '@semantic-release/git',
   ],
+  publishConfig: {
+    access: 'public',
+  },
 };
