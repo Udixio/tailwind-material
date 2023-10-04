@@ -1,4 +1,5 @@
 module.exports = {
+  npmPublish: true,
   repositoryUrl: 'https://github.com/Udixio/tailwind-material.git',
   branches: ['master', 'next', { name: 'beta', prerelease: true }],
   plugins: [
