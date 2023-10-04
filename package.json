@@ -52,6 +52,8 @@
     "@babel/preset-env": "^7.22.20",
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/git": "^10.0.1",
+    "@size-limit/esbuild": "^9.0.0",
+    "@size-limit/esbuild-why": "^9.0.0",
     "@size-limit/preset-small-lib": "^9.0.0",
     "@tsconfig/recommended": "^1.0.3",
     "@types/color": "^3.0.4",
@@ -63,7 +65,7 @@
     "tslib": "^2.6.2",
     "typescript": "^5.2.2"
   },
-  "dependencies": {
+  "peerDependencies": {
     "@material/material-color-utilities": "^0.2.7",
     "color": "^4.2.3",
     "tailwindcss": "^3.3.3"
