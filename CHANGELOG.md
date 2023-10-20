@@ -1,3 +1,10 @@
+# [1.0.0-beta.7](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-20)
+
+
+### Bug Fixes
+
+* Export Variant from material-theme in index. ([8b93171](https://github.com/Udixio/tailwind-material/commit/8b93171ccacd27a31696cac1bad0c9f2bceae93f))
+
 # [1.0.0-beta.6](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-20)
 
 
