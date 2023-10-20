@@ -4,12 +4,13 @@ describe('createMaterialTheme', () => {
   it('returns an object with correct color and plugin configurations', () => {
     const result = createMaterialTheme(
       {
-        primary: '#6750A4',
+        primary: '#0a65ec',
       },
       'class'
     );
 
-    expect(result.colors['primary-light']).toEqual('#6750a4');
+    expect(result.colors['primary-container-light']).toEqual('#0a65ec');
+    // expect(result.colors['primary-light']).toEqual('#513a8d');
     // expect(result.colors['primary-dark']).toEqual('#D0BCFF');
     expect(result.colors.primary).toEqual(
       'rgb(var(--color-primary) / <alpha-value> )'

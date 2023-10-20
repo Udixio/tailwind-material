@@ -62,7 +62,7 @@ export const materialTheme = (colorsMap: {
   ['light', 'dark'].forEach((theme) => {
     const scheme = new DynamicScheme({
       sourceColorArgb: primary,
-      variant: Variant.TONAL_SPOT,
+      variant: Variant.FIDELITY,
       contrastLevel: 0,
       isDark: theme === 'dark',
       primaryPalette: p,
@@ -84,6 +84,5 @@ export const materialTheme = (colorsMap: {
       }
     }
   });
-
   return colors;
 };
