@@ -1,3 +1,10 @@
+# [1.0.0-beta.6](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.5...v1.0.0-beta.6) (2023-10-20)
+
+
+### Features
+
+* Add variant parameter to materialTheme ([7679cd1](https://github.com/Udixio/tailwind-material/commit/7679cd1e8960c21034e078e19c7793007726a72c))
+
 # [1.0.0-beta.5](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-20)
 
 
