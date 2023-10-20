@@ -25,11 +25,14 @@ type MaterialDynamicColorsType = {
   [key: string]: DynamicColor;
 };
 
-export const materialTheme = (colorsMap: {
-  primary: any;
-  secondary?: string;
-  tertiary?: string;
-}) => {
+export const materialTheme = (
+  colorsMap: {
+    primary: any;
+    secondary?: string;
+    tertiary?: string;
+  },
+  variant: Variant = Variant.TONAL_SPOT
+) => {
   const primary = argbFromHex(colorsMap.primary);
 
   let secondary: number | undefined;
@@ -62,7 +65,7 @@ export const materialTheme = (colorsMap: {
   ['light', 'dark'].forEach((theme) => {
     const scheme = new DynamicScheme({
       sourceColorArgb: primary,
-      variant: Variant.FIDELITY,
+      variant: variant,
       contrastLevel: 0,
       isDark: theme === 'dark',
       primaryPalette: p,
