@@ -1,3 +1,10 @@
+# [1.0.0-beta.5](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.4...v1.0.0-beta.5) (2023-10-20)
+
+
+### Bug Fixes
+
+* Change color scheme in material-theme ([8d44ad4](https://github.com/Udixio/tailwind-material/commit/8d44ad4d90ff447498cf1580cf43f57169ff263a)), closes [#0a65](https://github.com/Udixio/tailwind-material/issues/0a65)
+
 # [1.0.0-beta.4](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.3...v1.0.0-beta.4) (2023-10-04)
 
 
