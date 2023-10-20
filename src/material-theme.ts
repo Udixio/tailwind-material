@@ -31,7 +31,8 @@ export const materialTheme = (
     secondary?: string;
     tertiary?: string;
   },
-  variant: Variant = Variant.TONAL_SPOT
+  variant: Variant = Variant.TONAL_SPOT,
+  contrastLevel = 1
 ) => {
   const primary = argbFromHex(colorsMap.primary);
 
@@ -66,7 +67,7 @@ export const materialTheme = (
     const scheme = new DynamicScheme({
       sourceColorArgb: primary,
       variant: variant,
-      contrastLevel: 0,
+      contrastLevel: contrastLevel,
       isDark: theme === 'dark',
       primaryPalette: p,
       secondaryPalette: s,

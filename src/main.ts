@@ -7,9 +7,14 @@ import { Config } from 'tailwindcss';
 export const createMaterialTheme = (
   colorsMap: { primary: any; secondary?: string; tertiary?: string },
   darkMode: null | 'class' | 'media',
-  variant?: Variant
+  variant?: Variant,
+  contrastLevel?: number
 ) => {
-  let colors: Record<string, string> = materialTheme(colorsMap, variant);
+  let colors: Record<string, string> = materialTheme(
+    colorsMap,
+    variant,
+    contrastLevel
+  );
   const plugins: {
     handler: any;
     config?: Partial<Config> | undefined;
