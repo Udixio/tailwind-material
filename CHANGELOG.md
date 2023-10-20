@@ -1,3 +1,10 @@
+# [1.0.0-beta.8](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-20)
+
+
+### Features
+
+* Add contrastLevel parameter to createMaterialTheme and materialTheme. ([85b02f3](https://github.com/Udixio/tailwind-material/commit/85b02f3115e18b120bbf552930f701a8e4a9f2f7))
+
 # [1.0.0-beta.7](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.6...v1.0.0-beta.7) (2023-10-20)
 
 
