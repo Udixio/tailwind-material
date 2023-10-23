@@ -1,13 +1,15 @@
 import plugin from 'tailwindcss/plugin';
 import Color from 'color';
 
-export function darkTheme(
-  colors: Record<string, string>,
-  mode: 'class' | 'media'
-) {
+export interface DarkThemeParams {
+  colors: Record<string, string>;
+  darkMode: 'class' | 'media';
+}
+
+export function darkTheme({ colors, darkMode }: DarkThemeParams) {
   const stylesToAdd: { [key: string]: { [key: string]: any } } = {
     html: {},
-    ...(mode === 'media'
+    ...(darkMode === 'media'
       ? { '@media (prefers-color-scheme: dark)': { html: {} } }
       : { '.dark': {} }),
   };
@@ -38,7 +40,7 @@ export function darkTheme(
           const darkStyle = Color(darkColor).rgb().array().join(' ');
 
           stylesToAdd.html[varName] = lightStyle;
-          if (mode === 'media') {
+          if (darkColor === 'media') {
             stylesToAdd['@media (prefers-color-scheme: dark)'].html[varName] =
               darkStyle;
           } else {

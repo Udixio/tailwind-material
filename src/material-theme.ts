@@ -1,6 +1,5 @@
 import {
   argbFromHex,
-  CorePalette,
   DynamicColor,
   DynamicScheme,
   Hct,
@@ -25,33 +24,56 @@ type MaterialDynamicColorsType = {
   [key: string]: DynamicColor;
 };
 
-export const materialTheme = (
-  colorsMap: {
-    primary: any;
-    secondary?: string;
-    tertiary?: string;
-  },
-  variant: Variant = Variant.TONAL_SPOT,
-  contrastLevel = 1
-) => {
-  const primary = argbFromHex(colorsMap.primary);
+interface ColorOptions {
+  primary: string;
+  secondary?: string;
+  tertiary?: string;
+  neutral?: string;
+  neutralVariant?: string;
+}
 
-  let secondary: number | undefined;
-  if (colorsMap.secondary != null) {
-    secondary = argbFromHex(colorsMap.secondary);
+export interface MaterialThemeParams {
+  colorsMap: { [key: string]: string } & ColorOptions;
+  variant?: Variant;
+  contrastLevel?: number;
+}
+
+export const materialTheme = ({
+  colorsMap,
+  variant = Variant.TONAL_SPOT,
+  contrastLevel = 0,
+}: MaterialThemeParams) => {
+  if (!colorsMap.primary) {
+    throw new Error('Primary color must be specified');
   }
-  let tertiary: number | undefined;
-  if (colorsMap.tertiary != null) {
-    tertiary = argbFromHex(colorsMap.tertiary);
+
+  let argbColors: Record<string | keyof ColorOptions, number | undefined> = {
+    primary: undefined,
+    secondary: undefined,
+    tertiary: undefined,
+    neutral: undefined,
+    neutralVariant: undefined,
+  };
+
+  for (const colorKey in colorsMap) {
+    argbColors[colorKey] = colorsMap[colorKey]
+      ? argbFromHex(colorsMap[colorKey])
+      : undefined;
   }
-  CorePalette.fromColors({
-    primary: primary,
-    secondary: secondary,
-    tertiary,
-  });
-  const p = TonalPalette.fromHct(Hct.fromInt(primary));
-  const s = TonalPalette.fromHct(Hct.fromInt(secondary ? secondary : primary));
-  const t = TonalPalette.fromHct(Hct.fromInt(tertiary ? tertiary : primary));
+
+  const tonalPalettes: { [key: string]: TonalPalette } = {};
+
+  for (const colorKey in argbColors) {
+    if (argbColors[colorKey] !== undefined) {
+      tonalPalettes[colorKey] = TonalPalette.fromHct(
+        Hct.fromInt(<number>argbColors[colorKey])
+      );
+    } else {
+      tonalPalettes[colorKey] = TonalPalette.fromHct(
+        Hct.fromInt(argbColors.primary!)
+      );
+    }
+  }
 
   const colors: Record<string, string> = {
     transparent: 'transparent',
@@ -65,21 +87,23 @@ export const materialTheme = (
 
   ['light', 'dark'].forEach((theme) => {
     const scheme = new DynamicScheme({
-      sourceColorArgb: primary,
+      sourceColorArgb: argbColors.primary!,
       variant: variant,
       contrastLevel: contrastLevel,
       isDark: theme === 'dark',
-      primaryPalette: p,
-      secondaryPalette: s,
-      tertiaryPalette: t,
-      neutralPalette: TonalPalette.fromHueAndChroma(p.hue, 6.0),
-      neutralVariantPalette: TonalPalette.fromHueAndChroma(p.hue, 8.0),
+      primaryPalette: tonalPalettes.primary,
+      secondaryPalette: tonalPalettes.secondary,
+      tertiaryPalette: tonalPalettes.tertiary,
+      neutralPalette: tonalPalettes.neutral,
+      neutralVariantPalette: tonalPalettes.neutralVariant,
     });
 
     for (let key in MaterialDynamicColorsTyped) {
       if (MaterialDynamicColorsTyped.hasOwnProperty(key)) {
         if (key !== 'contentAccentToneDelta' && !key.includes('Palette')) {
-          const argb = MaterialDynamicColorsTyped[key].getArgb(scheme);
+          const dynamicColor = MaterialDynamicColorsTyped[key];
+
+          const argb = dynamicColor.getArgb(scheme);
           const hex = hexFromArgb(argb);
           const kebabCase = key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
