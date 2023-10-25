@@ -1,3 +1,10 @@
+# [1.0.0-beta.10](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.9...v1.0.0-beta.10) (2023-10-25)
+
+
+### Bug Fixes
+
+* In the Material Theme class, we made a change to retain the original color of non-primary color schemes when they are not specifically set, instead of defaulting them to the primary color. This addressed a problem where non-primary color schemes defaulted to the primary color if not specifically set. ([9c1a56b](https://github.com/Udixio/tailwind-material/commit/9c1a56b681aa176fe72e940df65cbbd67f9e2bbe))
+
 # [1.0.0-beta.9](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-10-25)
 
 
