@@ -1,4 +1,4 @@
-import { materialTheme, MaterialThemeParams } from './material-theme';
+import { MaterialTheme, MaterialThemeParams } from './material-theme';
 import { darkTheme, DarkThemeParams } from './dark-theme';
 import { materialStates } from './material-states';
 import { materialFonts } from './material-fonts';
@@ -14,11 +14,11 @@ export interface createMaterialThemeParams
     Omit<DarkThemeParams, 'colors'> {}
 
 export const createMaterialTheme = (params: createMaterialThemeParams) => {
-  let colors: Record<string, string> = materialTheme({
+  let colors: Record<string, string> = new MaterialTheme({
     colorsMap: params.colors,
     variant: params.variant,
     contrastLevel: params.contrastLevel,
-  });
+  }).generateTheme();
   const plugins: {
     handler: any;
     config?: Partial<Config> | undefined;
