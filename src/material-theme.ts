@@ -113,9 +113,15 @@ export class MaterialTheme {
           isDark: isDark,
           contrastLevel: this.contrastLevel,
         });
-        (args as { [key: string]: any })[colorKey + 'Palette'] = (
-          colorTheme as { [key: string]: any }
-        )[colorKey + 'Palette'];
+
+        if (colorKey !== 'neutral' && colorKey !== 'neutralVariant') {
+          (args as { [key: string]: any })[colorKey + 'Palette'] =
+            colorTheme['primaryPalette'];
+        } else {
+          (args as { [key: string]: any })[colorKey + 'Palette'] = (
+            colorTheme as { [key: string]: any }
+          )[colorKey + 'Palette'];
+        }
       }
     });
 
