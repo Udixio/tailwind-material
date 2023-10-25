@@ -1,3 +1,10 @@
+# [1.0.0-beta.9](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.8...v1.0.0-beta.9) (2023-10-25)
+
+
+### Bug Fixes
+
+* rectification of the issue where the 'neutral' color of a variant always had the same chrome, regardless of the theme variant. ([da5a1d2](https://github.com/Udixio/tailwind-material/commit/da5a1d2056a27c84d698fbce922a00e0d0b75ba8))
+
 # [1.0.0-beta.8](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.7...v1.0.0-beta.8) (2023-10-20)
 
 
