@@ -5,12 +5,12 @@ describe('createMaterialTheme', () => {
     const result = createMaterialTheme({
       colors: {
         primary: '#0a65ec',
+        tertiary: '#63f1dc',
+        neutral: '#41bfe5',
       },
-      variant: Variant.FIDELITY,
       darkMode: 'class',
+      variant: Variant.FIDELITY,
     });
-
-    console.log(result.colors);
 
     expect(result.colors['primary-container-light']).toEqual('#0a65ec');
     // expect(result.colors['primary-light']).toEqual('#513a8d');
