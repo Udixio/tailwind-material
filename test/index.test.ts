@@ -5,7 +5,6 @@ describe('createMaterialTheme', () => {
     const result = createMaterialTheme({
       colors: {
         primary: '#0a65ec',
-        success: '#22c55e',
       },
       variant: Variant.FIDELITY,
       darkMode: 'class',
