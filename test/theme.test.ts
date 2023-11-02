@@ -13,10 +13,6 @@ describe('createMaterialTheme', () => {
       variant: Variant.FIDELITY,
     });
 
-    console.log(result.colors['tertiary-light']);
-    console.log(result.colors['surface-light']);
-    console.log(result.colors['on-surface-variant-light']);
-
     expect(result.colors['primary-container-light']).toEqual('#0a65ec');
     // expect(result.colors['primary-light']).toEqual('#513a8d');
     // expect(result.colors['primary-dark']).toEqual('#D0BCFF');
