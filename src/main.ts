@@ -4,18 +4,13 @@ import { materialStates } from './material-states';
 import { materialFonts } from './material-fonts';
 import { Config } from 'tailwindcss';
 
-type ColorsMapRenamed = {
-  colors: MaterialThemeParams['colorsMap'];
-};
-
 export interface createMaterialThemeParams
-  extends Omit<MaterialThemeParams, 'colorsMap'>,
-    ColorsMapRenamed,
+  extends MaterialThemeParams,
     Omit<DarkThemeParams, 'colors'> {}
 
 export const createMaterialTheme = (params: createMaterialThemeParams) => {
   let colors: Record<string, string> = new MaterialTheme({
-    colorsMap: params.colors,
+    colors: params.colors,
     variant: params.variant,
     contrastLevel: params.contrastLevel,
   }).generateTheme();
