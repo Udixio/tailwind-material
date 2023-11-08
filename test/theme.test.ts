@@ -57,24 +57,24 @@ describe('createMaterialTheme', () => {
     expect(tertiaryLight).not.toEqual(primaryLight);
   });
 
-  // it('doit rendre une surface blanc lorsque la tonalité est réglé à 100', () => {
-  //   const toneFunction = jest.fn((s) => (s.isDark ? 6 : 100));
-  //   theme = createMaterialTheme({
-  //     colors: {
-  //       palette: {
-  //         primary: '#6750A4',
-  //       },
-  //       dynamic: {
-  //         surface: {
-  //           tone: toneFunction,
-  //         },
-  //       },
-  //     },
-  //     darkMode: 'class',
-  //   });
-  //   expect(toneFunction).toHaveBeenCalled();
-  //   expect(theme.colors['surface-light']).toEqual('#ffffff');
-  // });
+  it('doit rendre une surface blanc lorsque la tonalité est réglé à 100', () => {
+    const toneFunction = jest.fn((s) => (s.isDark ? 6 : 100));
+    theme = createMaterialTheme({
+      colors: {
+        palette: {
+          primary: '#6750A4',
+        },
+        dynamic: {
+          surface: {
+            tone: toneFunction,
+          },
+        },
+      },
+      darkMode: 'class',
+    });
+    expect(toneFunction).toHaveBeenCalled();
+    expect(theme.colors['surface-light']).toEqual('#ffffff');
+  });
   it('doit rendre une primary égal à la couleur source lorsque ...', () => {
     theme = createMaterialTheme({
       colors: {
@@ -86,6 +86,7 @@ describe('createMaterialTheme', () => {
             tone: (s) => {
               return 100;
             },
+            toneDeltaPair: undefined,
           },
           // onPrimary: {
           //   tone: (s) => {

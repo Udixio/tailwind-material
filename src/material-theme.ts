@@ -38,8 +38,8 @@ interface ColorOptions {
   neutralVariant?: string;
 }
 
-interface dynamicColorOptions {
-  name?: string;
+interface DynamicColorOptions {
+  name: string;
   palette: (scheme: DynamicScheme) => TonalPalette;
   tone: (scheme: DynamicScheme) => number;
   isBackground?: boolean;
@@ -63,7 +63,7 @@ interface dynamicColorOptions {
 export interface MaterialThemeParams {
   colors: {
     palette: ColorOptions & { [key: string]: string };
-    dynamic?: { [key: string]: Partial<dynamicColorOptions> };
+    dynamic?: { [key: string]: Partial<DynamicColorOptions> };
   };
   variant?: Variant;
   contrastLevel?: number;
@@ -72,7 +72,7 @@ export interface MaterialThemeParams {
 export class MaterialTheme {
   colorsPalette: { [key: string]: string } & ColorOptions;
   argbColors: Record<string | keyof ColorOptions, number | undefined>;
-  dynamicColors?: { [key: string]: Partial<dynamicColorOptions> };
+  _dynamicColorsOptions = new Map<string, DynamicColorOptions>();
   variant: Variant;
   contrastLevel: number;
 
@@ -87,7 +87,19 @@ export class MaterialTheme {
       neutral: undefined,
       neutralVariant: undefined,
     };
-    this.dynamicColors = colors.dynamic;
+    this.addDefaultDynamicColorsOptions();
+    if (colors.dynamic) {
+      Object.entries(colors.dynamic).forEach(([key, color]) => {
+        const snakeCase = key.replace(
+          /[A-Z]/g,
+          (letter) => `_${letter.toLowerCase()}`
+        );
+        this.updateDynamicColorsOptions({
+          ...color,
+          name: snakeCase,
+        });
+      });
+    }
     if (!this.colorsPalette.primary) {
       throw new Error('Primary color must be specified');
     }
@@ -224,40 +236,57 @@ export class MaterialTheme {
     }
   }
 
+  addDefaultDynamicColorsOptions() {
+    let dynamicColors = MaterialDynamicColors;
+    for (let key in dynamicColors) {
+      if (dynamicColors.hasOwnProperty(key)) {
+        if (key !== 'contentAccentToneDelta' && !key.includes('Palette')) {
+          const dynamicColor = (dynamicColors as any)[key] as DynamicColor;
+          this.addDynamicColorsOptions({
+            ...dynamicColor,
+          });
+        }
+      }
+    }
+  }
+
+  addDynamicColorsOptions(args: DynamicColorOptions) {
+    this._dynamicColorsOptions.set(args.name, args);
+  }
+
+  updateDynamicColorsOptions(
+    args: { name: string } & Partial<DynamicColorOptions>
+  ) {
+    const dynamicColorsOptions = this._dynamicColorsOptions.get(args.name);
+    if (dynamicColorsOptions) {
+      this._dynamicColorsOptions.set(args.name, {
+        ...dynamicColorsOptions,
+        ...args,
+      });
+    } else {
+      new Error("The color doesn't exist.");
+    }
+  }
+
   getDynamicColors(scheme: DynamicScheme, darkMode: boolean) {
     let dynamicColors: Record<string, string> = {};
 
-    const MaterialDynamicColorsTyped: MaterialDynamicColorsType =
-      MaterialDynamicColors as unknown as MaterialDynamicColorsType;
+    for (const dynamicColorOption of this._dynamicColorsOptions.values()) {
+      const dynamicColor = DynamicColor.fromPalette(dynamicColorOption as any);
 
-    for (let key in MaterialDynamicColorsTyped) {
-      if (MaterialDynamicColorsTyped.hasOwnProperty(key)) {
-        if (key !== 'contentAccentToneDelta' && !key.includes('Palette')) {
-          let dynamicColorOptions: any = MaterialDynamicColorsTyped[key];
-          if (this.dynamicColors) {
-            if (this.dynamicColors[key]) {
-              dynamicColorOptions = {
-                ...dynamicColorOptions,
-                ...this.dynamicColors[key],
-              };
-              console.log(key, dynamicColorOptions.tone());
-            }
-          }
-
-          const dynamicColor = DynamicColor.fromPalette(dynamicColorOptions);
-          const argb = dynamicColor.getArgb(scheme);
-          const hex = hexFromArgb(argb);
-          const kebabCase = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-
-          if (this.dynamicColors) {
-            if (this.dynamicColors[key]) {
-              console.log(key, hex);
-            }
-          }
-
-          dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
-        }
+      if (dynamicColorOption.name == 'primary') {
+        console.log('test: ', dynamicColor);
+        console.log('wowww: ', dynamicColor.getTone(scheme));
       }
+
+      const argb = dynamicColor!.getArgb(scheme);
+      const hex = hexFromArgb(argb);
+
+      const kebabCase = dynamicColorOption.name
+        .replace(/_/g, '-')
+        .toLowerCase();
+
+      dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
     }
 
     return dynamicColors;
