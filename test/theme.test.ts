@@ -1,5 +1,7 @@
 import {Config} from 'tailwindcss';
-import {createMaterialTheme} from '../src';
+import {ContrastCurve, createMaterialTheme} from '../src';
+import {MaterialDynamicColors} from '@material/material-color-utilities';
+
 //TODO complete the test
 describe('createMaterialTheme', () => {
   let theme: {
@@ -79,28 +81,22 @@ describe('createMaterialTheme', () => {
     theme = createMaterialTheme({
       colors: {
         palette: {
-          primary: '#6750A4',
+          primary: '#87CEEB',
         },
         dynamic: {
           primary: {
             tone: (s) => {
-              return 100;
+              return s.sourceColorHct.tone;
             },
-            toneDeltaPair: undefined,
+            background: (s) => MaterialDynamicColors.highestSurface(s),
+            contrastCurve: new ContrastCurve(1, 1, 3, 7),
+            // toneDeltaPair: undefined,
           },
-          // onPrimary: {
-          //   tone: (s) => {
-          //     return DynamicColor.foregroundTone(
-          //       MaterialDynamicColors.primaryContainer.tone(s),
-          //       4.5
-          //     );
-          //   },
-          // },
         },
       },
       darkMode: 'class',
     });
-    expect(theme.colors['primary-light']).toEqual('#ffffff');
+    expect(theme.colors['primary-light']).toEqual('#87ceeb');
     // expect(theme.colors['on-primary-light']).toEqual('#6750A4');
   });
 });

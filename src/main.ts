@@ -1,4 +1,4 @@
-import { MaterialTheme, MaterialThemeParams } from './material-theme';
+import { MaterialTheme, MaterialThemeParams } from './theme/materialTheme';
 import { darkTheme, DarkThemeParams } from './dark-theme';
 import { materialStates } from './material-states';
 import { materialFonts } from './material-fonts';

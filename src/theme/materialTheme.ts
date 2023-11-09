@@ -5,64 +5,13 @@ import {
   Hct,
   hexFromArgb,
   MaterialDynamicColors,
-  SchemeExpressive,
-  SchemeFidelity,
-  SchemeMonochrome,
-  SchemeNeutral,
-  SchemeTonalSpot,
-  SchemeVibrant,
-  TonalPalette,
 } from '@material/material-color-utilities';
-
-export enum Variant {
-  MONOCHROME,
-  NEUTRAL,
-  TONAL_SPOT,
-  VIBRANT,
-  EXPRESSIVE,
-  FIDELITY,
-  CONTENT,
-  // RAINBOW,
-  // FRUIT_SALAD,
-}
-
-type MaterialDynamicColorsType = {
-  [key: string]: DynamicColor;
-};
-
-interface ColorOptions {
-  primary: string;
-  secondary?: string;
-  tertiary?: string;
-  neutral?: string;
-  neutralVariant?: string;
-}
-
-interface DynamicColorOptions {
-  name: string;
-  palette: (scheme: DynamicScheme) => TonalPalette;
-  tone: (scheme: DynamicScheme) => number;
-  isBackground?: boolean;
-  background?: (scheme: DynamicScheme) => DynamicColor;
-  secondBackground?: (scheme: DynamicScheme) => DynamicColor;
-  contrastCurve?: {
-    low: number;
-    readonly normal: number;
-    readonly medium: number;
-    readonly high: number;
-  };
-  toneDeltaPair?: (scheme: DynamicScheme) => {
-    roleA: DynamicColor;
-    readonly roleB: DynamicColor;
-    readonly delta: number;
-    readonly polarity: 'darker' | 'lighter' | 'nearer' | 'farther';
-    readonly stayTogether: boolean;
-  };
-}
+import { createDynamicScheme, Variant } from './variant';
+import { DynamicColorOptions, ThemeColorOptions } from './colorTypes';
 
 export interface MaterialThemeParams {
   colors: {
-    palette: ColorOptions & { [key: string]: string };
+    palette: ThemeColorOptions & { [key: string]: string };
     dynamic?: { [key: string]: Partial<DynamicColorOptions> };
   };
   variant?: Variant;
@@ -70,8 +19,8 @@ export interface MaterialThemeParams {
 }
 
 export class MaterialTheme {
-  colorsPalette: { [key: string]: string } & ColorOptions;
-  argbColors: Record<string | keyof ColorOptions, number | undefined>;
+  colorsPalette: { [key: string]: string } & ThemeColorOptions;
+  argbColors: Record<string | keyof ThemeColorOptions, number | undefined>;
   _dynamicColorsOptions = new Map<string, DynamicColorOptions>();
   variant: Variant;
   contrastLevel: number;
@@ -129,7 +78,7 @@ export class MaterialTheme {
   };
 
   getDynamicScheme(isDark: boolean) {
-    const defaultTheme = this.getDynamicSchemeFromVariant(this.variant, {
+    const defaultTheme = createDynamicScheme(this.variant, {
       sourceColorHct: Hct.fromInt(this.argbColors.primary!),
       isDark: isDark,
       contrastLevel: this.contrastLevel,
@@ -148,7 +97,7 @@ export class MaterialTheme {
 
     Object.keys(this.argbColors).forEach((colorKey) => {
       if (this.argbColors[colorKey] && colorKey !== 'primary') {
-        const colorTheme = this.getDynamicSchemeFromVariant(this.variant, {
+        const colorTheme = createDynamicScheme(this.variant, {
           sourceColorHct: Hct.fromInt(this.argbColors[colorKey]!),
           isDark: isDark,
           contrastLevel: this.contrastLevel,
@@ -166,74 +115,6 @@ export class MaterialTheme {
     });
 
     return new DynamicScheme(args);
-  }
-
-  getDynamicSchemeFromVariant(
-    variant: Variant,
-    schemeOptions: {
-      sourceColorHct: Hct;
-      isDark: boolean;
-      contrastLevel: number;
-    }
-  ) {
-    switch (variant) {
-      case Variant.MONOCHROME:
-        return new SchemeMonochrome(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.NEUTRAL:
-        return new SchemeNeutral(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.TONAL_SPOT:
-        return new SchemeTonalSpot(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.VIBRANT:
-        return new SchemeVibrant(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.EXPRESSIVE:
-        return new SchemeExpressive(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.FIDELITY:
-        return new SchemeFidelity(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      case Variant.CONTENT:
-        return new SchemeFidelity(
-          schemeOptions.sourceColorHct,
-          schemeOptions.isDark,
-          schemeOptions.contrastLevel
-        );
-      // case Variant.RAINBOW:
-      //   return new SchemeRainbow(
-      //     schemeOptions.sourceColorHct,
-      //     schemeOptions.isDark,
-      //     schemeOptions.contrastLevel
-      //   );
-      // case Variant.FRUIT_SALAD:
-      //   return new SchemeFruitSalad(
-      //     schemeOptions.sourceColorHct,
-      //     schemeOptions.isDark,
-      //     schemeOptions.contrastLevel
-      //   );
-      default:
-        throw new Error('Unsupported scheme variant');
-    }
   }
 
   addDefaultDynamicColorsOptions() {
@@ -276,17 +157,23 @@ export class MaterialTheme {
 
       if (dynamicColorOption.name == 'primary') {
         console.log('test: ', dynamicColor);
-        console.log('wowww: ', dynamicColor.getTone(scheme));
+        console.log('ideal: ', dynamicColorOption.tone(scheme));
+        console.log('real: ', dynamicColor.getTone(scheme));
       }
 
       const argb = dynamicColor!.getArgb(scheme);
       const hex = hexFromArgb(argb);
-
+      if (dynamicColorOption.name == 'primary') {
+        console.log('result: ', hex);
+      }
       const kebabCase = dynamicColorOption.name
         .replace(/_/g, '-')
         .toLowerCase();
 
       dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
+      // if (dynamicColorOption.name == 'primary') {
+      //   console.log(dynamicColors);
+      // }
     }
 
     return dynamicColors;
