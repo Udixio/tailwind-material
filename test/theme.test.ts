@@ -1,6 +1,6 @@
 import {Config} from 'tailwindcss';
-import {ContrastCurve, createMaterialTheme} from '../src';
-import {MaterialDynamicColors} from '@material/material-color-utilities';
+import {ContrastCurve, createMaterialTheme, MaterialDynamicColors,} from '../src';
+import {DynamicColor} from '@material/material-color-utilities';
 
 //TODO complete the test
 describe('createMaterialTheme', () => {
@@ -90,7 +90,15 @@ describe('createMaterialTheme', () => {
             },
             background: (s) => MaterialDynamicColors.highestSurface(s),
             contrastCurve: new ContrastCurve(1, 1, 3, 7),
-            // toneDeltaPair: undefined,
+            toneDeltaPair: undefined,
+          },
+          onPrimary: {
+            tone: (s) => {
+              return DynamicColor.foregroundTone(
+                MaterialDynamicColors.getColor('primaryContainer').tone(s),
+                4.5
+              );
+            },
           },
         },
       },

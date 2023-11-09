@@ -4,10 +4,10 @@ import {
   DynamicScheme,
   Hct,
   hexFromArgb,
-  MaterialDynamicColors,
 } from '@material/material-color-utilities';
 import { createDynamicScheme, Variant } from './variant';
 import { DynamicColorOptions, ThemeColorOptions } from './colorTypes';
+import { MaterialDynamicColors } from './materialDynamicColors';
 
 export interface MaterialThemeParams {
   colors: {
@@ -118,16 +118,12 @@ export class MaterialTheme {
   }
 
   addDefaultDynamicColorsOptions() {
-    let dynamicColors = MaterialDynamicColors;
+    let dynamicColors = MaterialDynamicColors.getColors();
     for (let key in dynamicColors) {
-      if (dynamicColors.hasOwnProperty(key)) {
-        if (key !== 'contentAccentToneDelta' && !key.includes('Palette')) {
-          const dynamicColor = (dynamicColors as any)[key] as DynamicColor;
-          this.addDynamicColorsOptions({
-            ...dynamicColor,
-          });
-        }
-      }
+      const dynamicColor = (dynamicColors as any)[key];
+      this.addDynamicColorsOptions({
+        ...dynamicColor,
+      });
     }
   }
 
