@@ -1,3 +1,10 @@
+# [1.0.0-beta.12](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-11-09)
+
+
+### Features
+
+* each dynamic color is now configurable ([004afaf](https://github.com/Udixio/tailwind-material/commit/004afafb45f49e1185cd01ec9a9f26214776d82d))
+
 # [1.0.0-beta.11](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.10...v1.0.0-beta.11) (2023-10-25)
 
 ### Bug Fixes
