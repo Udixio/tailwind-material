@@ -151,25 +151,14 @@ export class MaterialTheme {
     for (const dynamicColorOption of this._dynamicColorsOptions.values()) {
       const dynamicColor = DynamicColor.fromPalette(dynamicColorOption as any);
 
-      if (dynamicColorOption.name == 'primary') {
-        console.log('test: ', dynamicColor);
-        console.log('ideal: ', dynamicColorOption.tone(scheme));
-        console.log('real: ', dynamicColor.getTone(scheme));
-      }
-
       const argb = dynamicColor!.getArgb(scheme);
       const hex = hexFromArgb(argb);
-      if (dynamicColorOption.name == 'primary') {
-        console.log('result: ', hex);
-      }
+
       const kebabCase = dynamicColorOption.name
         .replace(/_/g, '-')
         .toLowerCase();
 
       dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
-      // if (dynamicColorOption.name == 'primary') {
-      //   console.log(dynamicColors);
-      // }
     }
 
     return dynamicColors;

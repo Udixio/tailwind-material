@@ -59,7 +59,7 @@ describe('createMaterialTheme', () => {
     expect(tertiaryLight).not.toEqual(primaryLight);
   });
 
-  it('doit rendre une surface blanc lorsque la tonalité est réglé à 100', () => {
+  it('Should render a white surface when the tone is set to 100', () => {
     const toneFunction = jest.fn((s) => (s.isDark ? 6 : 100));
     theme = createMaterialTheme({
       colors: {
@@ -77,7 +77,7 @@ describe('createMaterialTheme', () => {
     expect(toneFunction).toHaveBeenCalled();
     expect(theme.colors['surface-light']).toEqual('#ffffff');
   });
-  it('doit rendre une primary égal à la couleur source lorsque ...', () => {
+  it('Should the primary key be equal to the source when configuring the tones as the fidelity variant.', () => {
     theme = createMaterialTheme({
       colors: {
         palette: {
