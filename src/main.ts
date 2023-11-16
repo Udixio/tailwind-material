@@ -1,18 +1,19 @@
 import { MaterialTheme, MaterialThemeParams } from './theme/materialTheme';
 import { darkTheme, DarkThemeParams } from './dark-theme';
 import { materialStates } from './material-states';
-import { materialFonts } from './material-fonts';
+import { materialFonts, MaterialFontsParams } from './material-fonts';
 import { Config } from 'tailwindcss';
 
 export interface createMaterialThemeParams
   extends MaterialThemeParams,
-    Omit<DarkThemeParams, 'colors'> {}
+    Omit<DarkThemeParams, 'colors'>,
+    MaterialFontsParams {}
 
-export const createMaterialTheme = (params: createMaterialThemeParams) => {
+export const createMaterialTheme = (args: createMaterialThemeParams) => {
   let colors: Record<string, string> = new MaterialTheme({
-    colors: params.colors,
-    variant: params.variant,
-    contrastLevel: params.contrastLevel,
+    colors: args.colors,
+    variant: args.variant,
+    contrastLevel: args.contrastLevel,
   }).generateTheme();
   const plugins: {
     handler: any;
@@ -22,16 +23,16 @@ export const createMaterialTheme = (params: createMaterialThemeParams) => {
   const states = materialStates();
   plugins.push(states.plugin);
 
-  if (params.darkMode) {
+  if (args.darkMode) {
     const theme = darkTheme({
       colors: colors,
-      darkMode: params.darkMode,
+      darkMode: args.darkMode,
     });
     colors = theme.colors;
     plugins.push(theme.plugin);
   }
 
-  const fonts = materialFonts();
+  const fonts = materialFonts({ fontFamily: args.fontFamily });
   plugins.push(fonts.plugin);
 
   return { colors: colors, fontFamily: fonts.fontFamily, plugins: plugins };
