@@ -1,3 +1,10 @@
+# [1.0.0-beta.13](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-11-16)
+
+
+### Features
+
+* Updated MaterialFonts, typography styles, and Tailwind Material version ([aab7649](https://github.com/Udixio/tailwind-material/commit/aab7649810752cf18860cf96ac54476bed03d4e1))
+
 # [1.0.0-beta.12](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.11...v1.0.0-beta.12) (2023-11-09)
 
 
