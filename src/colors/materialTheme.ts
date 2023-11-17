@@ -8,6 +8,7 @@ import {
 import { createDynamicScheme, Variant } from './variant';
 import { DynamicColorOptions, ThemeColorOptions } from './colorTypes';
 import { MaterialDynamicColors } from './materialDynamicColors';
+import { ExportTheme } from '../figma/exportTheme';
 
 export interface MaterialThemeParams {
   colors: {
@@ -70,10 +71,14 @@ export class MaterialTheme {
 
     ['light', 'dark'].forEach((theme) => {
       const dynamicScheme = this.getDynamicScheme(theme === 'dark');
-
       let dynamicColors = this.getDynamicColors(dynamicScheme, theme == 'dark');
       Object.assign(colorsList, dynamicColors);
     });
+
+    const colorPalette = this.getColorPalette();
+    //TODO to be activated only when darkMode is tested
+
+    // Object.assign(colorsList,colorPalette);
     return colorsList;
   };
 
@@ -152,15 +157,56 @@ export class MaterialTheme {
       const dynamicColor = DynamicColor.fromPalette(dynamicColorOption as any);
 
       const argb = dynamicColor!.getArgb(scheme);
-      const hex = hexFromArgb(argb);
+      const hex = hexFromArgb(argb).toUpperCase();
 
       const kebabCase = dynamicColorOption.name
         .replace(/_/g, '-')
         .toLowerCase();
 
       dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
+
+      ExportTheme.update({
+        schemes: {
+          [darkMode ? 'dark' : 'light']: {
+            [dynamicColorOption.name.replace(/(_\w)/g, function (match) {
+              return match[1].toUpperCase();
+            })]: hex,
+          },
+        },
+      });
     }
 
     return dynamicColors;
+  }
+
+  getColorPalette() {
+    let colorPalette: Record<string, string> = {};
+    const dynamicScheme = this.getDynamicScheme(false);
+
+    Object.entries({
+      primary: dynamicScheme.primaryPalette,
+      secondary: dynamicScheme.secondaryPalette,
+      tertiary: dynamicScheme.tertiaryPalette,
+      neutral: dynamicScheme.neutralPalette,
+      'neutral-variant': dynamicScheme.neutralVariantPalette,
+    }).forEach(([paletteName, tonalPalette]) => {
+      (tonalPalette = dynamicScheme.primaryPalette),
+        [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100].forEach(
+          (value) => {
+            const hex = hexFromArgb(tonalPalette.tone(value)).toUpperCase();
+
+            colorPalette[`${paletteName}-${value}`] = hex;
+
+            ExportTheme.update({
+              palettes: {
+                [paletteName]: {
+                  [value]: hex,
+                },
+              },
+            });
+          }
+        );
+    });
+    return colorPalette;
   }
 }

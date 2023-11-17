@@ -1,39 +1,78 @@
-import { MaterialTheme, MaterialThemeParams } from './theme/materialTheme';
+import { MaterialTheme, MaterialThemeParams } from './colors/materialTheme';
 import { darkTheme, DarkThemeParams } from './dark-theme';
 import { materialStates } from './material-states';
 import { materialFonts, MaterialFontsParams } from './material-fonts';
 import { Config } from 'tailwindcss';
+import { ExportTheme, ExportThemeParams } from './figma/exportTheme';
 
 export interface createMaterialThemeParams
   extends MaterialThemeParams,
     Omit<DarkThemeParams, 'colors'>,
-    MaterialFontsParams {}
+    MaterialFontsParams,
+    ExportThemeParams {
+  name?: string;
+}
 
 export const createMaterialTheme = (args: createMaterialThemeParams) => {
-  let colors: Record<string, string> = new MaterialTheme({
-    colors: args.colors,
-    variant: args.variant,
-    contrastLevel: args.contrastLevel,
-  }).generateTheme();
-  const plugins: {
-    handler: any;
-    config?: Partial<Config> | undefined;
-  }[] = [];
+  const builder = new ThemeBuilder(args);
+  return builder.build();
+};
 
-  const states = materialStates();
-  plugins.push(states.plugin);
+class ThemeBuilder {
+  private colors: Record<string, string> = {};
+  private plugins: { handler: any; config?: Partial<Config> | undefined }[] =
+    [];
+  constructor(private args: createMaterialThemeParams) {}
 
-  if (args.darkMode) {
-    const theme = darkTheme({
-      colors: colors,
-      darkMode: args.darkMode,
+  build() {
+    this.createColors();
+    this.addPlugin(materialStates().plugin);
+
+    if (this.args.darkMode) {
+      this.addDarkMode();
+    }
+
+    this.addFontsPlugin();
+
+    ExportTheme.export({
+      filePath: this.args.themePath,
+      sourceColor: this.args.colors.palette.primary,
+      name: this.args.name,
     });
-    colors = theme.colors;
-    plugins.push(theme.plugin);
+
+    return {
+      colors: this.colors,
+      fontFamily: this.args.fontFamily,
+      plugins: this.plugins,
+    };
   }
 
-  const fonts = materialFonts({ fontFamily: args.fontFamily });
-  plugins.push(fonts.plugin);
+  private createColors() {
+    this.colors = new MaterialTheme({
+      colors: this.args.colors,
+      variant: this.args.variant,
+      contrastLevel: this.args.contrastLevel,
+    }).generateTheme();
+  }
 
-  return { colors: colors, fontFamily: fonts.fontFamily, plugins: plugins };
-};
+  private addDarkMode() {
+    const theme = darkTheme({
+      colors: this.colors,
+      darkMode: this.args.darkMode,
+    });
+    this.colors = theme.colors;
+    this.addPlugin(theme.plugin);
+  }
+
+  private addFontsPlugin() {
+    const fonts = materialFonts({ fontFamily: this.args.fontFamily });
+    this.addPlugin(fonts.plugin);
+  }
+
+  private addPlugin(plugin: {
+    handler: any;
+    config?: Partial<Config> | undefined;
+  }) {
+    this.plugins.push(plugin);
+  }
+}

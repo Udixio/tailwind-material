@@ -1,12 +1,15 @@
-import {Config} from 'tailwindcss';
-import {ContrastCurve, createMaterialTheme, MaterialDynamicColors,} from '../src';
-import {DynamicColor} from '@material/material-color-utilities';
+import { Config } from 'tailwindcss';
+import {
+  ContrastCurve,
+  createMaterialTheme,
+  MaterialDynamicColors,
+} from '../src';
+import { DynamicColor } from '@material/material-color-utilities';
 
 //TODO complete the test
 describe('createMaterialTheme', () => {
   let theme: {
     colors: Record<string, string>;
-    fontFamily: { roboto: string[] };
     plugins: { handler: any; config?: Partial<Config> }[];
   };
   beforeEach(() => {
@@ -51,9 +54,9 @@ describe('createMaterialTheme', () => {
     expect(secondaryLight).toBeDefined();
     expect(tertiaryLight).toBeDefined();
 
-    expect(primaryLight).toBe('#65558f');
-    expect(secondaryLight).toBe('#625b71');
-    expect(tertiaryLight).toBe('#7e5260');
+    expect(primaryLight).toBe('#65558F');
+    expect(secondaryLight).toBe('#625B71');
+    expect(tertiaryLight).toBe('#7E5260');
 
     expect(secondaryLight).not.toEqual(primaryLight);
     expect(tertiaryLight).not.toEqual(primaryLight);
@@ -75,7 +78,7 @@ describe('createMaterialTheme', () => {
       darkMode: 'class',
     });
     expect(toneFunction).toHaveBeenCalled();
-    expect(theme.colors['surface-light']).toEqual('#ffffff');
+    expect(theme.colors['surface-light']).toEqual('#FFFFFF');
   });
   it('Should the primary key be equal to the source when configuring the tones as the fidelity variant.', () => {
     theme = createMaterialTheme({
@@ -104,7 +107,22 @@ describe('createMaterialTheme', () => {
       },
       darkMode: 'class',
     });
-    expect(theme.colors['primary-light']).toEqual('#87ceeb');
-    // expect(theme.colors['on-primary-light']).toEqual('#6750A4');
+    expect(theme.colors['primary-light']).toEqual('#87CEEB');
+    // expect(colors.colors['on-primary-light']).toEqual('#6750A4');
+  });
+
+  it('Doit créer un fichier de colors pour figma', () => {
+    theme = createMaterialTheme({
+      colors: {
+        palette: {
+          primary: '#6750A4',
+        },
+      },
+      darkMode: 'class',
+      themePath: './colors.json',
+      name: "it's a test",
+    });
+    // expect(colors.colors['primary-light']).toEqual('#87ceeb');
+    // expect(colors.colors['on-primary-light']).toEqual('#6750A4');
   });
 });
