@@ -79,6 +79,7 @@ export class MaterialTheme {
     //TODO to be activated only when darkMode is tested
 
     // Object.assign(colorsList,colorPalette);
+
     return colorsList;
   };
 

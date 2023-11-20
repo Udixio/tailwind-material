@@ -78,12 +78,6 @@ function findDesiredChromaByTone(
 // tslint:disable-next-line:class-as-namespace
 export class MaterialDynamicColors {
   private static colorMap: { [key: string]: DynamicColor } = {
-    primary_palette_key_color: DynamicColor.fromPalette({
-      name: 'primary_palette_key_color',
-      palette: (s) => s.primaryPalette,
-      tone: (s) => s.primaryPalette.keyColor.tone,
-    }),
-
     background: DynamicColor.fromPalette({
       name: 'background',
       palette: (s) => s.neutralPalette,

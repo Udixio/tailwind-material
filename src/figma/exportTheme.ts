@@ -13,12 +13,6 @@ interface Font {
   letterSpacing: number;
 }
 
-interface Styles {
-  large: Font;
-  medium: Font;
-  small: Font;
-}
-
 interface ExtendedColors {
   harmonized: boolean;
   color: string;
@@ -36,7 +30,7 @@ interface Theme {
   coreColors: Colors;
   schemes: Record<string, Colors>;
   palettes: Record<string, Colors>;
-  styles: Record<string, Styles>;
+  styles: Record<string, object>;
   extendedColors: ExtendedColors[];
   name: string;
 }

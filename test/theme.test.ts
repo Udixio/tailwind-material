@@ -5,6 +5,7 @@ import {
   MaterialDynamicColors,
 } from '../src';
 import { DynamicColor } from '@material/material-color-utilities';
+import fs from 'fs';
 
 //TODO complete the test
 describe('createMaterialTheme', () => {
@@ -111,7 +112,8 @@ describe('createMaterialTheme', () => {
     // expect(colors.colors['on-primary-light']).toEqual('#6750A4');
   });
 
-  it('Doit créer un fichier de colors pour figma', () => {
+  it('Should create a color file for Figma', () => {
+    const path = './colors.json';
     theme = createMaterialTheme({
       colors: {
         palette: {
@@ -119,10 +121,12 @@ describe('createMaterialTheme', () => {
         },
       },
       darkMode: 'class',
-      themePath: './colors.json',
+      themePath: path,
       name: "it's a test",
     });
-    // expect(colors.colors['primary-light']).toEqual('#87ceeb');
-    // expect(colors.colors['on-primary-light']).toEqual('#6750A4');
+
+    expect(fs.existsSync(path)).toBeTruthy();
+
+    fs.unlinkSync(path);
   });
 });
