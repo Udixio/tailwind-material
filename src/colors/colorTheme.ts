@@ -6,27 +6,38 @@ import {
   hexFromArgb,
 } from '@material/material-color-utilities';
 import { createDynamicScheme, Variant } from './variant';
-import { DynamicColorOptions, ThemeColorOptions } from './colorTypes';
-import { MaterialDynamicColors } from './materialDynamicColors';
-import { ExportTheme } from '../figma/exportTheme';
+import { DynamicColorOptions } from './colorTypes';
+import {
+  DynamicColorKey,
+  MaterialDynamicColors,
+} from './materialDynamicColors';
+import { ExtendTheme } from '../utils/extendTheme';
+import { Theme } from '..';
 
-export interface MaterialThemeParams {
+export type PaletteKeyColor =
+  | 'primary'
+  | 'secondary'
+  | 'tertiary'
+  | 'neutral'
+  | 'neutralVariant';
+
+export interface ColorThemeOption {
   colors: {
-    palette: ThemeColorOptions & { [key: string]: string };
-    dynamic?: { [key: string]: Partial<DynamicColorOptions> };
+    palette: Record<PaletteKeyColor, string>;
+    dynamic?: Record<DynamicColorKey, Partial<DynamicColorOptions>>;
   };
   variant?: Variant;
   contrastLevel?: number;
 }
 
-export class MaterialTheme {
-  colorsPalette: { [key: string]: string } & ThemeColorOptions;
-  argbColors: Record<string | keyof ThemeColorOptions, number | undefined>;
+export class ColorTheme implements ExtendTheme {
+  colorsPalette: Record<PaletteKeyColor, string>;
+  argbColors: Record<PaletteKeyColor, number | undefined>;
   _dynamicColorsOptions = new Map<string, DynamicColorOptions>();
   variant: Variant;
   contrastLevel: number;
 
-  constructor({ colors, variant, contrastLevel }: MaterialThemeParams) {
+  constructor({ colors, variant, contrastLevel }: ColorThemeOption) {
     this.colorsPalette = colors.palette;
     this.variant = variant || Variant.TONAL_SPOT;
     this.contrastLevel = contrastLevel || 0;
@@ -55,9 +66,11 @@ export class MaterialTheme {
     }
   }
 
-  generateTheme = () => {
+  updateTheme(theme: Theme): Theme {
     for (const colorKey in this.colorsPalette) {
-      this.argbColors[colorKey] = this.colorsPalette[colorKey]
+      this.argbColors[colorKey] = this.colorsPalette[
+        colorKey as PaletteKeyColor
+      ]
         ? argbFromHex(this.colorsPalette[colorKey])
         : undefined;
     }
@@ -80,8 +93,10 @@ export class MaterialTheme {
 
     // Object.assign(colorsList,colorPalette);
 
-    return colorsList;
-  };
+    theme.colors = colorsList;
+
+    return theme;
+  }
 
   getDynamicScheme(isDark: boolean) {
     const defaultTheme = createDynamicScheme(this.variant, {
@@ -126,10 +141,12 @@ export class MaterialTheme {
   addDefaultDynamicColorsOptions() {
     let dynamicColors = MaterialDynamicColors.getColors();
     for (let key in dynamicColors) {
-      const dynamicColor = (dynamicColors as any)[key];
-      this.addDynamicColorsOptions({
-        ...dynamicColor,
-      });
+      if (Object.prototype.hasOwnProperty.call(dynamicColors, key)) {
+        const dynamicColor = dynamicColors[key as DynamicColorKey];
+        this.addDynamicColorsOptions({
+          ...dynamicColor,
+        });
+      }
     }
   }
 

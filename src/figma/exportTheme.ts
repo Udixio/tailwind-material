@@ -1,4 +1,6 @@
 import fs from 'fs';
+import { Theme } from '../main';
+import { FontRole, FontSize, FontStyle } from '../font/font-theme';
 
 export interface ExportThemeParams {
   themePath?: string;
@@ -24,15 +26,19 @@ interface Colors {
   [key: string]: string;
 }
 
-interface Theme {
+export interface ThemeFigma {
   seed: string;
   description: string;
   coreColors: Colors;
   schemes: Record<string, Colors>;
   palettes: Record<string, Colors>;
-  styles: Record<string, object>;
+  styles: Record<FontRole, Record<FontSize, FontStyle>>;
   extendedColors: ExtendedColors[];
   name: string;
+}
+
+export interface ExportableTheme {
+  exportTheme: () => Partial<ThemeFigma>;
 }
 
 export class ExportTheme {
@@ -95,7 +101,7 @@ export class ExportTheme {
     return data;
   }
 
-  public static update(updateObject: Partial<Theme>): void {
+  public static update(updateObject: Partial<ThemeFigma>): void {
     this._theme = this.deepUpdate({ ...this._theme }, updateObject);
   }
 }

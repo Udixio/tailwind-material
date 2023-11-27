@@ -67,6 +67,56 @@ function findDesiredChromaByTone(
 
   return answer;
 }
+export type DynamicColorKey =
+  | 'background'
+  | 'onBackground'
+  | 'surface'
+  | 'surfaceDim'
+  | 'surfaceBright'
+  | 'surfaceContainerLowest'
+  | 'surfaceContainerLow'
+  | 'surfaceContainer'
+  | 'surfaceContainerHigh'
+  | 'surfaceContainerHighest'
+  | 'onSurface'
+  | 'surfaceVariant'
+  | 'onSurfaceVariant'
+  | 'inverseSurface'
+  | 'inverseOnSurface'
+  | 'outline'
+  | 'outlineVariant'
+  | 'shadow'
+  | 'scrim'
+  | 'surfaceTint'
+  | 'primary'
+  | 'onPrimary'
+  | 'primaryContainer'
+  | 'onPrimaryContainer'
+  | 'inversePrimary'
+  | 'secondary'
+  | 'onSecondary'
+  | 'secondaryContainer'
+  | 'onSecondaryContainer'
+  | 'tertiary'
+  | 'onTertiary'
+  | 'tertiaryContainer'
+  | 'onTertiaryContainer'
+  | 'error'
+  | 'onError'
+  | 'errorContainer'
+  | 'onErrorContainer'
+  | 'primaryFixed'
+  | 'primaryFixedDim'
+  | 'onPrimaryFixed'
+  | 'onPrimaryFixedVariant'
+  | 'secondaryFixed'
+  | 'secondaryFixedDim'
+  | 'onSecondaryFixed'
+  | 'onSecondaryFixedVariant'
+  | 'tertiaryFixed'
+  | 'tertiaryFixedDim'
+  | 'onTertiaryFixed'
+  | 'onTertiaryFixedVariant';
 
 /**
  * DynamicColors for the colors in the Material Design system.
@@ -77,7 +127,7 @@ function findDesiredChromaByTone(
 // Material Color Utilities namespaces the various utilities it provides.
 // tslint:disable-next-line:class-as-namespace
 export class MaterialDynamicColors {
-  private static colorMap: { [key: string]: DynamicColor } = {
+  private static colorMap: Record<DynamicColorKey, DynamicColor> = {
     background: DynamicColor.fromPalette({
       name: 'background',
       palette: (s) => s.neutralPalette,
@@ -638,7 +688,7 @@ export class MaterialDynamicColors {
     return this.colorMap;
   }
 
-  static setColor(name: string, dynamicColor: DynamicColor) {
+  static setColor(name: DynamicColorKey, dynamicColor: DynamicColor) {
     this.colorMap[name] = dynamicColor;
   }
 

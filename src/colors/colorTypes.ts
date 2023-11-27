@@ -5,14 +5,6 @@ import {
 } from '@material/material-color-utilities';
 import { ContrastCurve } from './contrastCurve';
 
-export interface ThemeColorOptions {
-  primary: string;
-  secondary?: string;
-  tertiary?: string;
-  neutral?: string;
-  neutralVariant?: string;
-}
-
 export interface DynamicColorOptions {
   name: string;
   palette: (scheme: DynamicScheme) => TonalPalette;
