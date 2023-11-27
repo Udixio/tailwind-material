@@ -1,3 +1,10 @@
+# [1.0.0-beta.14](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.13...v1.0.0-beta.14) (2023-11-20)
+
+
+### Features
+
+* Theme Export for Figma Plugin in Tailwind-Material ([fd3021a](https://github.com/Udixio/tailwind-material/commit/fd3021a42ab95ad669768f8c0c4e9922c60c207c))
+
 # [1.0.0-beta.13](https://github.com/Udixio/tailwind-material/compare/v1.0.0-beta.12...v1.0.0-beta.13) (2023-11-16)
 
 
