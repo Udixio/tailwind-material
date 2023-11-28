@@ -26,10 +26,10 @@ export type FontRole = 'display' | 'headline' | 'title' | 'label' | 'body';
 export type FontSize = 'large' | 'medium' | 'small';
 
 export class FontTheme implements ExtendTheme, ExportableTheme {
-  pixelUnit = 'rem';
   fontFamily: { expressive: string[]; neutral: string[] };
   responsiveBreakPoints: Record<string, number>;
   fontStyles: Record<FontRole, Record<FontSize, FontStyle>>;
+  private pixelUnit = 'rem';
 
   constructor(args: FontThemeOption) {
     this.fontFamily = {
