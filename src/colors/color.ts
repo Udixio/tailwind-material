@@ -4,7 +4,7 @@ import {
   hexFromArgb,
   TonalPalette,
 } from '@material/material-color-utilities';
-import { ContrastCurve } from './material-color-utilities/contrastCurve';
+import { ContrastCurve } from './material-color-utilities';
 
 export interface ColorOptions {
   name: string;

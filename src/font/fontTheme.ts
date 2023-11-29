@@ -1,6 +1,6 @@
 import plugin from 'tailwindcss/plugin';
 import { CSSRuleObject } from 'tailwindcss/types/config';
-import { ExtendTheme, Theme } from '../utils/extendTheme';
+import { ExtendTheme, Theme } from '../utils';
 import { ExportableTheme, ThemeFigma } from '../figma';
 
 export type FontStyle = {

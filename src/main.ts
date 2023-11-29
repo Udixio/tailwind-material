@@ -1,4 +1,4 @@
-import { ThemeBuilderOption, ThemeManager } from './utils/themeManager';
+import { ThemeBuilderOption, ThemeManager } from './utils';
 
 export const createMaterialTheme = (args: ThemeBuilderOption) => {
   const themeManager = new ThemeManager(args);

@@ -22,8 +22,7 @@ import {
   Hct,
 } from '@material/material-color-utilities';
 import { Variant } from './variant';
-import { ContrastCurve } from './material-color-utilities/contrastCurve';
-import { ToneDeltaPair } from './material-color-utilities/toneDeltaPair';
+import { ContrastCurve, ToneDeltaPair } from './material-color-utilities';
 
 function isFidelity(scheme: DynamicScheme): boolean {
   return (
@@ -687,7 +686,7 @@ export class MaterialDynamicColors {
     return this.colorMap;
   }
 
-  static setColor(name: DynamicColorKey, dynamicColor: DynamicColor) {
+  public static setColor(name: DynamicColorKey, dynamicColor: DynamicColor) {
     this.colorMap[name] = dynamicColor;
   }
 

@@ -10,7 +10,7 @@ import {
   DynamicColorKey,
   MaterialDynamicColors,
 } from './materialDynamicColors';
-import { ExtendTheme, Theme } from '../utils/extendTheme';
+import { ExtendTheme, Theme } from '../utils';
 import { Color, ColorOptions } from './color';
 import { ExportableTheme, ThemeFigma } from '../figma';
 

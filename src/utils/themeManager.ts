@@ -1,12 +1,13 @@
-import { FontTheme, FontThemeOption } from '../font/font-theme';
+import { FontTheme, FontThemeOption } from '../font/fontTheme';
 import { ColorTheme, ColorThemeOption } from '../colors';
 import { ExtendTheme, Theme } from './extendTheme';
 import { ExportableTheme, ExportTheme, ExportThemeParams } from '../figma';
-import { DarkThemeParams } from '../dark-mode/dark-theme';
+import { DarkTheme, DarkThemeOption } from '../dark-mode/darkTheme';
+import { StateTheme } from '../state';
 
 export interface ThemeBuilderOption
   extends ColorThemeOption,
-    Omit<DarkThemeParams, 'colors'>,
+    DarkThemeOption,
     FontThemeOption,
     ExportThemeParams {
   name?: string;
@@ -24,7 +25,12 @@ export class ThemeManager {
 
   constructor(
     private args: ThemeBuilderOption,
-    private modules: ModuleConstructor[] = [FontTheme, ColorTheme]
+    private modules: ModuleConstructor[] = [
+      FontTheme,
+      ColorTheme,
+      StateTheme,
+      DarkTheme,
+    ]
   ) {
     this.createInstances();
   }
