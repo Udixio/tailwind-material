@@ -6,15 +6,15 @@ import {
   hexFromArgb,
 } from '@material/material-color-utilities';
 import { createDynamicScheme, Variant } from './variant';
-import { DynamicColorOptions } from './colorTypes';
 import {
   DynamicColorKey,
   MaterialDynamicColors,
 } from './materialDynamicColors';
-import { ExtendTheme } from '../utils/extendTheme';
-import { Theme } from '..';
+import { ExtendTheme, Theme } from '../utils/extendTheme';
+import { Color, ColorOptions } from './color';
+import { ExportableTheme, ThemeFigma } from '../figma';
 
-export type PaletteKeyColor =
+export type PaletteColorKey =
   | 'primary'
   | 'secondary'
   | 'tertiary'
@@ -23,17 +23,20 @@ export type PaletteKeyColor =
 
 export interface ColorThemeOption {
   colors: {
-    palette: Record<PaletteKeyColor, string>;
-    dynamic?: Record<DynamicColorKey, Partial<DynamicColorOptions>>;
+    palette: Record<'primary', string> &
+      Partial<Record<PaletteColorKey, string>>;
+    dynamic?: Partial<Record<DynamicColorKey, Partial<ColorOptions>>>;
   };
   variant?: Variant;
   contrastLevel?: number;
 }
 
-export class ColorTheme implements ExtendTheme {
-  colorsPalette: Record<PaletteKeyColor, string>;
-  argbColors: Record<PaletteKeyColor, number | undefined>;
-  _dynamicColorsOptions = new Map<string, DynamicColorOptions>();
+export class ColorTheme implements ExtendTheme, ExportableTheme {
+  colorsPalette: Record<'primary', string> &
+    Partial<Record<PaletteColorKey, string>>;
+  // argbColors: Record<PaletteColorKey, number | undefined>;
+  // _dynamicColorsOptions = new Map<DynamicColorKey, DynamicColorOptions>();
+  colors: Map<DynamicColorKey, Color> = new Map();
   variant: Variant;
   contrastLevel: number;
 
@@ -41,24 +44,15 @@ export class ColorTheme implements ExtendTheme {
     this.colorsPalette = colors.palette;
     this.variant = variant || Variant.TONAL_SPOT;
     this.contrastLevel = contrastLevel || 0;
-    this.argbColors = {
-      primary: undefined,
-      secondary: undefined,
-      tertiary: undefined,
-      neutral: undefined,
-      neutralVariant: undefined,
-    };
+
     this.addDefaultDynamicColorsOptions();
     if (colors.dynamic) {
-      Object.entries(colors.dynamic).forEach(([key, color]) => {
-        const snakeCase = key.replace(
-          /[A-Z]/g,
-          (letter) => `_${letter.toLowerCase()}`
-        );
-        this.updateDynamicColorsOptions({
-          ...color,
-          name: snakeCase,
-        });
+      const entries = Object.entries(colors.dynamic) as [
+        DynamicColorKey,
+        DynamicColor
+      ][];
+      entries.forEach(([key, color]) => {
+        this.updateColorsOptions(key, color);
       });
     }
     if (!this.colorsPalette.primary) {
@@ -67,14 +61,6 @@ export class ColorTheme implements ExtendTheme {
   }
 
   updateTheme(theme: Theme): Theme {
-    for (const colorKey in this.colorsPalette) {
-      this.argbColors[colorKey] = this.colorsPalette[
-        colorKey as PaletteKeyColor
-      ]
-        ? argbFromHex(this.colorsPalette[colorKey])
-        : undefined;
-    }
-
     const colorsList: Record<string, string> = {
       transparent: 'transparent',
       current: 'currentColor',
@@ -89,23 +75,28 @@ export class ColorTheme implements ExtendTheme {
     });
 
     const colorPalette = this.getColorPalette();
-    //TODO to be activated only when darkMode is tested
 
-    // Object.assign(colorsList,colorPalette);
+    Object.assign(colorsList, colorPalette);
 
     theme.colors = colorsList;
 
     return theme;
   }
 
+  getArgbFromColorPalette(colorPalette: PaletteColorKey) {
+    const hex = this.colorsPalette[colorPalette];
+    if (hex) return argbFromHex(hex);
+  }
   getDynamicScheme(isDark: boolean) {
+    const primaryArgb = this.getArgbFromColorPalette('primary')!;
+
     const defaultTheme = createDynamicScheme(this.variant, {
-      sourceColorHct: Hct.fromInt(this.argbColors.primary!),
+      sourceColorHct: Hct.fromInt(primaryArgb),
       isDark: isDark,
       contrastLevel: this.contrastLevel,
     });
     const args = {
-      sourceColorArgb: this.argbColors.primary!,
+      sourceColorArgb: primaryArgb!,
       variant: this.variant,
       contrastLevel: this.contrastLevel,
       isDark: isDark,
@@ -116,22 +107,25 @@ export class ColorTheme implements ExtendTheme {
       neutralVariantPalette: defaultTheme.neutralVariantPalette,
     };
 
-    Object.keys(this.argbColors).forEach((colorKey) => {
-      if (this.argbColors[colorKey] && colorKey !== 'primary') {
+    Object.keys(this.colorsPalette).forEach((colorPaletteKey) => {
+      const colorPaletteArgb = this.getArgbFromColorPalette(
+        colorPaletteKey as PaletteColorKey
+      );
+      if (colorPaletteArgb && colorPaletteKey !== 'primary') {
         const colorTheme = createDynamicScheme(this.variant, {
-          sourceColorHct: Hct.fromInt(this.argbColors[colorKey]!),
+          sourceColorHct: Hct.fromInt(colorPaletteArgb),
           isDark: isDark,
           contrastLevel: this.contrastLevel,
         });
 
-        if (colorKey !== 'neutral' && colorKey !== 'neutralVariant') {
-          (args as { [key: string]: any })[colorKey + 'Palette'] =
-            colorTheme['primaryPalette'];
-        } else {
-          (args as { [key: string]: any })[colorKey + 'Palette'] = (
-            colorTheme as { [key: string]: any }
-          )[colorKey + 'Palette'];
-        }
+        // if (colorKey !== 'neutral' && colorKey !== 'neutralVariant') {
+        //   (args as { [key: string]: any })[colorKey + 'Palette'] =
+        //     colorTheme['primaryPalette'];
+        // } else {
+        (args as { [key: string]: any })[colorPaletteKey + 'Palette'] = (
+          colorTheme as { [key: string]: any }
+        )[colorPaletteKey + 'Palette'];
+        // }
       }
     });
 
@@ -140,66 +134,65 @@ export class ColorTheme implements ExtendTheme {
 
   addDefaultDynamicColorsOptions() {
     let dynamicColors = MaterialDynamicColors.getColors();
-    for (let key in dynamicColors) {
-      if (Object.prototype.hasOwnProperty.call(dynamicColors, key)) {
-        const dynamicColor = dynamicColors[key as DynamicColorKey];
-        this.addDynamicColorsOptions({
-          ...dynamicColor,
-        });
-      }
-    }
+    const entries = Object.entries(dynamicColors) as [
+      DynamicColorKey,
+      DynamicColor
+    ][];
+    entries.map(([key, dynamicColor]) =>
+      this.colors.set(key, new Color({ ...dynamicColor }))
+    );
   }
 
-  addDynamicColorsOptions(args: DynamicColorOptions) {
-    this._dynamicColorsOptions.set(args.name, args);
-  }
-
-  updateDynamicColorsOptions(
-    args: { name: string } & Partial<DynamicColorOptions>
+  updateColorsOptions(
+    colorKey: DynamicColorKey,
+    option: Partial<ColorOptions>
   ) {
-    const dynamicColorsOptions = this._dynamicColorsOptions.get(args.name);
-    if (dynamicColorsOptions) {
-      this._dynamicColorsOptions.set(args.name, {
-        ...dynamicColorsOptions,
-        ...args,
-      });
+    const color = this.colors.get(colorKey);
+    if (color) {
+      color.update(option);
+      this.colors.set(colorKey, color);
     } else {
       new Error("The color doesn't exist.");
     }
   }
+  exportTheme(): Partial<ThemeFigma> {
+    let themeFigma: Partial<ThemeFigma> = {};
 
-  getDynamicColors(scheme: DynamicScheme, darkMode: boolean) {
-    let dynamicColors: Record<string, string> = {};
+    const darkMode = ['light', 'dark'];
+    darkMode.forEach((theme) => {
+      const scheme = this.getDynamicScheme(theme === 'dark');
+      for (const color of this.colors.values()) {
+        const hex = color.getHex(scheme);
 
-    for (const dynamicColorOption of this._dynamicColorsOptions.values()) {
-      const dynamicColor = DynamicColor.fromPalette(dynamicColorOption as any);
-
-      const argb = dynamicColor!.getArgb(scheme);
-      const hex = hexFromArgb(argb).toUpperCase();
-
-      const kebabCase = dynamicColorOption.name
-        .replace(/_/g, '-')
-        .toLowerCase();
-
-      dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
-
-      ExportTheme.update({
-        schemes: {
+        themeFigma.schemes = {
           [darkMode ? 'dark' : 'light']: {
-            [dynamicColorOption.name.replace(/(_\w)/g, function (match) {
+            [color.getName().replace(/(_\w)/g, function (match) {
               return match[1].toUpperCase();
             })]: hex,
           },
-        },
-      });
-    }
+        };
+      }
+    });
 
+    const [_, themeFigmaPalettes] = this.getColorPalette();
+    themeFigma = { ...themeFigma, ...themeFigmaPalettes };
+
+    return themeFigma;
+  }
+  getDynamicColors(scheme: DynamicScheme, darkMode: boolean) {
+    let dynamicColors: Record<string, string> = {};
+    for (const color of this.colors.values()) {
+      const hex = color.getHex(scheme);
+      const kebabCase = color.getName().replace(/_/g, '-').toLowerCase();
+      dynamicColors[`${kebabCase}-${darkMode ? 'dark' : 'light'}`] = hex;
+    }
     return dynamicColors;
   }
 
   getColorPalette() {
     let colorPalette: Record<string, string> = {};
     const dynamicScheme = this.getDynamicScheme(false);
+    let themeFigma: Partial<ThemeFigma> = {};
 
     Object.entries({
       primary: dynamicScheme.primaryPalette,
@@ -215,16 +208,14 @@ export class ColorTheme implements ExtendTheme {
 
             colorPalette[`${paletteName}-${value}`] = hex;
 
-            ExportTheme.update({
-              palettes: {
-                [paletteName]: {
-                  [value]: hex,
-                },
+            themeFigma.palettes = {
+              [paletteName]: {
+                [value]: hex,
               },
-            });
+            };
           }
         );
     });
-    return colorPalette;
+    return [colorPalette, themeFigma];
   }
 }

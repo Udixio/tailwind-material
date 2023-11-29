@@ -1,6 +1,5 @@
 import fs from 'fs';
-import { Theme } from '../main';
-import { FontRole, FontSize, FontStyle } from '../font/font-theme';
+import { FontRole, FontSize, FontStyle } from '../font';
 
 export interface ExportThemeParams {
   themePath?: string;
@@ -48,7 +47,7 @@ export class ExportTheme {
     return this._theme;
   }
 
-  public static add(args: Partial<Theme>) {
+  public static add(args: Partial<ThemeFigma>) {
     this._theme = {
       ...this.theme,
       ...args,

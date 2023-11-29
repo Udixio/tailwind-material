@@ -22,8 +22,8 @@ import {
   Hct,
 } from '@material/material-color-utilities';
 import { Variant } from './variant';
-import { ContrastCurve } from './contrastCurve';
-import { ToneDeltaPair } from './toneDeltaPair';
+import { ContrastCurve } from './material-color-utilities/contrastCurve';
+import { ToneDeltaPair } from './material-color-utilities/toneDeltaPair';
 
 function isFidelity(scheme: DynamicScheme): boolean {
   return (
@@ -674,9 +674,8 @@ export class MaterialDynamicColors {
       contrastCurve: new ContrastCurve(3, 4.5, 7, 11),
     }),
   };
-  contentAccentToneDelta = 15.0;
 
-  public static getColor(name: keyof typeof MaterialDynamicColors.colorMap) {
+  public static getColor(name: DynamicColorKey) {
     if (this.colorMap[name]) {
       return this.colorMap[name];
     } else {
