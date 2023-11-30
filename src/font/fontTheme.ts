@@ -1,5 +1,5 @@
 import plugin from 'tailwindcss/plugin';
-import { CSSRuleObject } from 'tailwindcss/types/config';
+import { CSSRuleObject, PluginAPI } from 'tailwindcss/types/config';
 import { ExtendTheme, Theme } from '../utils';
 import { ExportableTheme, ThemeFigma } from '../figma';
 
@@ -167,10 +167,15 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
     };
 
     theme.plugins.push(
-      plugin(({ addUtilities, theme }) => {
-        const newUtilities = this.createUtilities(theme);
-        addUtilities(newUtilities);
-      })
+      plugin(
+        ({
+          addUtilities,
+          theme,
+        }: Pick<PluginAPI, 'theme'> & Pick<PluginAPI, 'addUtilities'>) => {
+          const newUtilities = this.createUtilities({ theme });
+          addUtilities(newUtilities);
+        }
+      )
     );
 
     return theme;
@@ -200,56 +205,59 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
   }
 
   private getFontWeight(fontWeight: number) {
-    switch (fontWeight) {
-      case 100:
-        return 'Thin';
-      case 200:
-        return 'ExtraLight';
-      case 300:
-        return 'Light';
-      case 400:
-        return 'Regular';
-      case 500:
-        return 'Medium';
-      case 600:
-        return 'SemiBold';
-      case 700:
-        return 'Bold';
-      case 800:
-        return 'ExtraBold';
-      case 900:
-        return 'Black';
-      default:
-        return 'Regular';
-    }
+    const weights = [
+      null,
+      'Thin',
+      'ExtraLight',
+      'Light',
+      'Regular',
+      'Medium',
+      'SemiBold',
+      'Bold',
+      'ExtraBold',
+      'Black',
+    ];
+    return weights[fontWeight / 100] || 'Regular';
   }
 
-  private createUtilities(theme: any): CSSRuleObject {
-    const newUtilities: { [key: string]: CSSRuleObject } = {};
+  private createUtilities({ theme }: Pick<PluginAPI, 'theme'>): CSSRuleObject {
+    const newUtilities: any = {};
+
+    const baseTextStyle = (sizeValue: FontStyle) => ({
+      fontSize: sizeValue.fontSize + this.pixelUnit,
+      fontWeight: sizeValue.fontWeight as unknown as CSSRuleObject,
+      lineHeight: sizeValue.lineHeight + this.pixelUnit,
+      letterSpacing: sizeValue.letterSpacing
+        ? sizeValue.letterSpacing + this.pixelUnit
+        : null,
+      fontFamily: theme('fontFamily.' + sizeValue.fontFamily),
+    });
+
+    const responsiveTextStyle = (
+      sizeValue: FontStyle,
+      breakPointName: string,
+      breakPointRatio: number
+    ) => ({
+      [`@media (min-width: ${theme('screens.' + breakPointName, {})})`]: {
+        fontSize: sizeValue.fontSize * breakPointRatio + this.pixelUnit,
+        lineHeight: sizeValue.lineHeight * breakPointRatio + this.pixelUnit,
+      },
+    });
+
     for (let [roleName, roleValue] of Object.entries(this.fontStyles)) {
       for (let [sizeName, sizeValue] of Object.entries(roleValue)) {
         newUtilities['.text-' + roleName + '-' + sizeName] = {
-          fontSize: sizeValue.fontSize + this.pixelUnit,
-          fontWeight: sizeValue.fontWeight as unknown as CSSRuleObject,
-          lineHeight: sizeValue.lineHeight + this.pixelUnit,
-          letterSpacing: sizeValue.letterSpacing
-            ? sizeValue.letterSpacing + this.pixelUnit
-            : null,
-          fontFamily: theme('fontFamily.' + sizeValue.fontFamily),
+          ...baseTextStyle(sizeValue),
           ...Object.entries(this.responsiveBreakPoints).reduce(
             (acc, [breakPointName, breakPointRatio]) => {
               acc = {
                 ...acc,
-                [`@media (min-width: ${theme(
-                  'screens.' + breakPointName,
-                  {}
-                )})`]: {
-                  fontSize:
-                    sizeValue.fontSize * breakPointRatio + this.pixelUnit,
-                  lineHeight:
-                    sizeValue.lineHeight * breakPointRatio + this.pixelUnit,
-                },
-              } as any;
+                ...responsiveTextStyle(
+                  sizeValue,
+                  breakPointName,
+                  breakPointRatio
+                ),
+              };
               return acc;
             },
             {}

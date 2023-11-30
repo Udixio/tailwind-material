@@ -74,7 +74,7 @@ export class ColorTheme implements ExtendTheme, ExportableTheme {
       Object.assign(colorsList, dynamicColors);
     });
 
-    const colorPalette = this.getColorPalette();
+    const [colorPalette, _] = this.getColorPalette();
 
     Object.assign(colorsList, colorPalette);
 
@@ -201,20 +201,17 @@ export class ColorTheme implements ExtendTheme, ExportableTheme {
       neutral: dynamicScheme.neutralPalette,
       'neutral-variant': dynamicScheme.neutralVariantPalette,
     }).forEach(([paletteName, tonalPalette]) => {
-      (tonalPalette = dynamicScheme.primaryPalette),
-        [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100].forEach(
-          (value) => {
-            const hex = hexFromArgb(tonalPalette.tone(value)).toUpperCase();
+      [0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 95, 99, 100].forEach((value) => {
+        const hex = hexFromArgb(tonalPalette.tone(value)).toUpperCase();
 
-            colorPalette[`${paletteName}-${value}`] = hex;
+        colorPalette[`${paletteName}-${value}`] = hex;
 
-            themeFigma.palettes = {
-              [paletteName]: {
-                [value]: hex,
-              },
-            };
-          }
-        );
+        themeFigma.palettes = {
+          [paletteName]: {
+            [value]: hex,
+          },
+        };
+      });
     });
     return [colorPalette, themeFigma];
   }
