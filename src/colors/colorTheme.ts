@@ -74,7 +74,7 @@ export class ColorTheme implements ExtendTheme, ExportableTheme {
       Object.assign(colorsList, dynamicColors);
     });
 
-    const colorPalette = this.getColorPalette();
+    const [colorPalette, _] = this.getColorPalette();
 
     Object.assign(colorsList, colorPalette);
 

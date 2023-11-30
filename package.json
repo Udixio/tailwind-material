@@ -5,6 +5,7 @@
   "author": "Joël",
   "main": "dist/index.js",
   "module": "dist/tailwind-material.esm.js",
+  "repository": "https://github.com/Udixio/tailwind-material.git",
   "typings": "dist/index.d.ts",
   "files": [
     "dist",
@@ -36,9 +37,6 @@
     "singleQuote": true,
     "trailingComma": "es5"
   },
-  "jest": {
-    "testEnvironment": "node"
-  },
   "engines": {
     "node": ">=12"
   },
@@ -53,6 +51,7 @@
     }
   ],
   "dependencies": {
+    "@babel/preset-typescript": "^7.23.3",
     "@material/material-color-utilities": "^0.2.7",
     "color": "^4.2.3"
   },

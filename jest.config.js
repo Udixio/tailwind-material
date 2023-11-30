@@ -1,4 +1,5 @@
 module.exports = {
+  testEnvironment: 'node',
   transformIgnorePatterns: [
     '/node_modules/(?!@material/material-color-utilities).+\\.js$',
   ],

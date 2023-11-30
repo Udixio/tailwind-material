@@ -2,12 +2,12 @@ import plugin from 'tailwindcss/plugin';
 import Color from 'color';
 import { ExtendTheme, Theme } from '../utils';
 
-export interface DarkThemeOption {
+export interface DarkModeThemeOption {
   darkMode: 'class' | 'media';
 }
 
-export class DarkTheme implements ExtendTheme {
-  constructor(private args: DarkThemeOption) {}
+export class DarkModeTheme implements ExtendTheme {
+  constructor(private args: DarkModeThemeOption) {}
   updateTheme(theme: Theme): Theme {
     let colors = theme.colors;
 
