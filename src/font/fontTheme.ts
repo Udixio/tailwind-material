@@ -176,7 +176,7 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
   }
 
   exportTheme(): Partial<ThemeFigma> {
-    const themeFigma: any = { styles: {} };
+    let themeFigma: any = { styles: {} };
     const getFontWeight = (fontWeight: number) => {
       switch (fontWeight) {
         case 100:
@@ -203,6 +203,9 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
     };
     for (let [roleName, roleValue] of Object.entries(this.fontStyles)) {
       for (let [sizeName, sizeValue] of Object.entries(roleValue)) {
+        console.log(themeFigma.styles);
+        if (!themeFigma.styles[roleName as FontRole])
+          themeFigma.styles[roleName as FontRole] = {};
         themeFigma.styles[roleName as FontRole][sizeName as FontSize] = {
           fontFamilyName:
             sizeValue.fontFamily == FontFamily.Expressive
