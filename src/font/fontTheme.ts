@@ -31,14 +31,15 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
   fontStyles: Record<FontRole, Record<FontSize, FontStyle>>;
   private pixelUnit = 'rem';
 
-  constructor(args: FontThemeOption) {
+  constructor(args?: FontThemeOption) {
     this.fontFamily = {
-      expressive: args.fontFamily?.expressive ?? ['Roboto', 'sans-serif'],
-      neutral: args.fontFamily?.neutral ?? ['Roboto', 'sans-serif'],
+      expressive: args?.fontFamily?.expressive ?? ['Roboto', 'sans-serif'],
+      neutral: args?.fontFamily?.neutral ?? ['Roboto', 'sans-serif'],
     };
-    this.responsiveBreakPoints = args.responsiveBreakPoints ?? {
+    this.responsiveBreakPoints = args?.responsiveBreakPoints ?? {
       lg: 1.125,
     };
+
     this.fontStyles = {
       display: {
         large: {
@@ -150,7 +151,7 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
         },
       },
     };
-    if (args.fontStyles)
+    if (args && args.fontStyles)
       Object.entries(args.fontStyles).forEach(([key, value]) => {
         this.fontStyles[key as FontRole] = {
           ...this.fontStyles[key as FontRole],
@@ -177,33 +178,9 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
 
   exportTheme(): Partial<ThemeFigma> {
     let themeFigma: any = { styles: {} };
-    const getFontWeight = (fontWeight: number) => {
-      switch (fontWeight) {
-        case 100:
-          return 'Thin';
-        case 200:
-          return 'ExtraLight';
-        case 300:
-          return 'Light';
-        case 400:
-          return 'Regular';
-        case 500:
-          return 'Medium';
-        case 600:
-          return 'SemiBold';
-        case 700:
-          return 'Bold';
-        case 800:
-          return 'ExtraBold';
-        case 900:
-          return 'Black';
-        default:
-          return 'Regular';
-      }
-    };
+
     for (let [roleName, roleValue] of Object.entries(this.fontStyles)) {
       for (let [sizeName, sizeValue] of Object.entries(roleValue)) {
-        console.log(themeFigma.styles);
         if (!themeFigma.styles[roleName as FontRole])
           themeFigma.styles[roleName as FontRole] = {};
         themeFigma.styles[roleName as FontRole][sizeName as FontSize] = {
@@ -211,7 +188,7 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
             sizeValue.fontFamily == FontFamily.Expressive
               ? this.fontFamily.expressive[0]
               : this.fontFamily.neutral[0],
-          fontFamilyStyle: getFontWeight(sizeValue.fontWeight),
+          fontFamilyStyle: this.getFontWeight(sizeValue.fontWeight),
           fontWeight: sizeValue.fontWeight,
           fontSize: sizeValue.fontSize * 16,
           lineHeight: sizeValue.lineHeight * 16,
@@ -220,6 +197,31 @@ export class FontTheme implements ExtendTheme, ExportableTheme {
       }
     }
     return themeFigma;
+  }
+
+  private getFontWeight(fontWeight: number) {
+    switch (fontWeight) {
+      case 100:
+        return 'Thin';
+      case 200:
+        return 'ExtraLight';
+      case 300:
+        return 'Light';
+      case 400:
+        return 'Regular';
+      case 500:
+        return 'Medium';
+      case 600:
+        return 'SemiBold';
+      case 700:
+        return 'Bold';
+      case 800:
+        return 'ExtraBold';
+      case 900:
+        return 'Black';
+      default:
+        return 'Regular';
+    }
   }
 
   private createUtilities(theme: any): CSSRuleObject {
