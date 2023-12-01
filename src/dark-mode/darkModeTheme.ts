@@ -4,11 +4,11 @@ import Color from 'color';
 import { flattenColors } from '../utils/flattenColors';
 
 export interface DarkModeThemeOption {
-  darkMode: 'class' | 'media';
+  darkMode?: 'class' | 'media';
 }
 
 export class DarkModeTheme implements ExtendTheme {
-  constructor(private args: DarkModeThemeOption) {}
+  constructor(private args: DarkModeThemeOption = { darkMode: 'class' }) {}
 
   updateTheme(theme: Theme): Theme {
     const stylesToAdd: { [key: string]: { [key: string]: any } } = {

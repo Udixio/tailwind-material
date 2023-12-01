@@ -7,4 +7,5 @@
                  start-page="Overview.md">
 
     <toc-element topic="Overview.md"/>
+    <toc-element topic="Installation.md"/>
 </instance-profile>

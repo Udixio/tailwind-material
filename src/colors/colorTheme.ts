@@ -22,11 +22,9 @@ export type PaletteColorKey =
   | 'neutralVariant';
 
 export interface ColorThemeOption {
-  colors: {
-    palette: Record<'primary', string> &
-      Partial<Record<PaletteColorKey, string>>;
-    dynamic?: Partial<Record<DynamicColorKey, Partial<ColorOptions>>>;
-  };
+  colorPalette: Record<'primary', string> &
+    Partial<Record<PaletteColorKey, string>>;
+  dynamicColor?: Partial<Record<DynamicColorKey, Partial<ColorOptions>>>;
   variant?: Variant;
   contrastLevel?: number;
 }
@@ -40,14 +38,19 @@ export class ColorTheme implements ExtendTheme, ExportableTheme {
   variant: Variant;
   contrastLevel: number;
 
-  constructor({ colors, variant, contrastLevel }: ColorThemeOption) {
-    this.colorsPalette = colors.palette;
+  constructor({
+    dynamicColor,
+    colorPalette,
+    variant,
+    contrastLevel,
+  }: ColorThemeOption) {
+    this.colorsPalette = colorPalette;
     this.variant = variant || Variant.TONAL_SPOT;
     this.contrastLevel = contrastLevel || 0;
 
     this.addDefaultDynamicColorsOptions();
-    if (colors.dynamic) {
-      const entries = Object.entries(colors.dynamic) as [
+    if (dynamicColor) {
+      const entries = Object.entries(dynamicColor) as [
         DynamicColorKey,
         DynamicColor
       ][];

@@ -56,7 +56,7 @@ export class ThemeManager {
     });
     ExportTheme.export({
       filePath: this.args.themePath,
-      sourceColor: this.args.colors.palette.primary,
+      sourceColor: this.args.colorPalette.primary,
       name: this.args.name,
     });
   }
