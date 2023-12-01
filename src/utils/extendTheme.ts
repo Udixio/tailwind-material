@@ -1,11 +1,10 @@
-import { PluginCreator } from 'tailwindcss/types/config';
-import { Config } from 'tailwindcss';
+import { PluginsConfig } from 'tailwindcss/types/config';
 
-export interface Theme {
+export type Theme = {
   colors: Record<string, string>;
   fontFamily: { expressive: string[]; neutral: string[] };
-  plugins: { handler: PluginCreator; config?: Partial<Config> | undefined }[];
-}
+  plugins: Partial<PluginsConfig>;
+};
 
 export interface ExtendTheme {
   updateTheme: (theme: Theme) => Theme;

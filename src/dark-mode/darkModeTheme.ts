@@ -1,6 +1,7 @@
 import plugin from 'tailwindcss/plugin';
-import Color from 'color';
 import { ExtendTheme, Theme } from '../utils';
+import Color from 'color';
+import { flattenColors } from '../utils/flattenColors';
 
 export interface DarkModeThemeOption {
   darkMode: 'class' | 'media';
@@ -8,9 +9,8 @@ export interface DarkModeThemeOption {
 
 export class DarkModeTheme implements ExtendTheme {
   constructor(private args: DarkModeThemeOption) {}
-  updateTheme(theme: Theme): Theme {
-    let colors = theme.colors;
 
+  updateTheme(theme: Theme): Theme {
     const stylesToAdd: { [key: string]: { [key: string]: any } } = {
       html: {},
       ...(this.args.darkMode === 'media'
@@ -18,48 +18,72 @@ export class DarkModeTheme implements ExtendTheme {
         : { '.dark': {} }),
     };
 
-    Object.keys(theme.colors).forEach((colorName) => {
+    let colors = flattenColors(theme.colors);
+    Object.keys(colors).forEach((colorName) => {
       const match = colorName.match(
         new RegExp(`^(?:(.+)-)?${'light'}(?:-(.+))?$`)
       );
 
-      if (match) {
-        const prefix = match[1];
-        const suffix = match[2];
-        const modeAwareColorName = [prefix, suffix].filter((x) => x).join('-');
+      if (!match) return;
 
-        const lightColor = colors[colorName];
-        const darkColor =
-          colors[[prefix, 'dark', suffix].filter((x) => x).join('-')];
+      const [_, prefix, suffix] = match;
+      const modeAwareColorName = [prefix, suffix].filter((x) => x).join('-');
+      const lightColor = colors[colorName];
+      const darkColor =
+        colors[[prefix, 'dark', suffix].filter((x) => x).join('-')];
 
-        if (lightColor && darkColor) {
-          if (colors[modeAwareColorName]) {
-            throw new Error(
-              `withModeAwareColors plugin error: adding the '${modeAwareColorName}' mode-aware color would overwrite an existing color.`
-            );
-          } else {
-            const varName = `--color-${modeAwareColorName}`;
-            colors[
-              modeAwareColorName
-            ] = `rgb(var(${varName}) / <alpha-value> )`;
-            const lightStyle = Color(lightColor).rgb().array().join(' ');
-            const darkStyle = Color(darkColor).rgb().array().join(' ');
-
-            stylesToAdd.html[varName] = lightStyle;
-            if (darkColor === 'media') {
-              stylesToAdd['@media (prefers-color-scheme: dark)'].html[varName] =
-                darkStyle;
-            } else {
-              stylesToAdd['.dark'][varName] = darkStyle;
-            }
-          }
+      if (lightColor && darkColor) {
+        if (colors[modeAwareColorName]) {
+          throw new Error(
+            `withModeAwareColors plugin error: adding the color '${modeAwareColorName}' that is mode-aware would overwrite a color that’s currently in existence.`
+          );
+        } else {
+          colors[modeAwareColorName] = this.formatRgb(lightColor);
+          this.handleStylesToAdd(
+            darkColor,
+            modeAwareColorName,
+            colors[modeAwareColorName],
+            stylesToAdd,
+            colors
+          );
         }
       }
     });
 
+    theme.plugins.push(
+      plugin(({ addBase, theme }) => {
+        addBase(stylesToAdd);
+      })
+    );
     theme.colors = colors;
-    theme.plugins.push(plugin(({ addBase }) => addBase(stylesToAdd)));
 
     return theme;
+  }
+
+  private formatRgb(color: any) {
+    return Color(color).rgb().array().join(' ');
+  }
+
+  private handleStylesToAdd(
+    darkColor: any,
+    modeAwareColorName: string,
+    lightStyle: string,
+    stylesToAdd: any,
+    colors: Record<string, string>
+  ) {
+    const varName = `--color-${modeAwareColorName}`;
+    colors[modeAwareColorName] = `rgb(var(${varName}) / <alpha-value> )`;
+
+    if (!darkColor) return;
+
+    const darkStyle = this.formatRgb(darkColor);
+    // colors[modeAwareColorName] = colorFormat;
+    stylesToAdd.html[varName] = lightStyle;
+    if (darkColor === 'media') {
+      stylesToAdd['@media (prefers-color-scheme: dark)'].html[varName] =
+        darkStyle;
+    } else {
+      stylesToAdd['.dark'][varName] = darkStyle;
+    }
   }
 }

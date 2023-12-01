@@ -12,7 +12,7 @@ describe('stateTheme', () => {
   let colorsFlatten;
   describe('flattenColorPalette', () => {
     it('all colors should be flatten', () => {
-      colorsFlatten = theme['flattenColorPalette'](colors);
+      colorsFlatten = theme['flattenColors'](colors);
       for (const [key, value] of Object.entries(colorsFlatten)) {
         expect(typeof key).toBe('string');
         expect(typeof value).toBe('string');
