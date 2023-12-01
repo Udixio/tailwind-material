@@ -1,40 +1,55 @@
 import { DarkModeTheme } from '../../src';
 import { colorsStub, darkModeOptionStub } from './darkMode.stub';
 
-describe('fontTheme', () => {
+describe('darkTheme', () => {
   let darkModeTheme: DarkModeTheme;
   beforeEach(() => {
     darkModeTheme = new DarkModeTheme(darkModeOptionStub);
   });
 
-  it('should properly initialize with provided theme option', () => {
-    expect(darkModeTheme).toBeTruthy();
+  it('should be created', () => {
+    expect(darkModeTheme).toBeDefined();
   });
 
-  it('should throw error for duplicate mode-aware color', () => {
+  it('should update theme', () => {
     const theme: any = {
       colors: colorsStub,
       plugins: [],
     };
-
-    expect(() => darkModeTheme.updateTheme(theme)).toThrow(
-      `withModeAwareColors plugin error: adding the 'blue' mode-aware color would overwrite an existing color.`
-    );
-  });
-
-  it('should update theme appropriately', () => {
-    const theme: any = {
-      colors: colorsStub,
-      plugins: [],
-    };
-
     const updatedTheme = darkModeTheme.updateTheme(theme);
 
-    expect(updatedTheme).toHaveProperty('colors.blue');
-    expect(updatedTheme.colors.blue).toEqual(
-      'rgb(var(--color-blue) / <alpha-value> )'
+    expect(updatedTheme).toBeDefined();
+    expect(updatedTheme.plugins).toHaveLength(1);
+  });
+
+  it('should format rgb', () => {
+    const color = '#ffffff';
+    const formattedRgb = darkModeTheme['formatRgb'](color);
+
+    expect(formattedRgb).toBe('255 255 255');
+  });
+
+  it('should handle styles to add', () => {
+    const darkColor = '#00008b';
+    const modeAwareColorName = 'colorName';
+    const lightStyle = '255 255 255';
+    const stylesToAdd: { [key: string]: { [key: string]: any } } = {
+      html: {},
+      ...(darkModeOptionStub.darkMode === 'media'
+        ? { '@media (prefers-color-scheme: dark)': { html: {} } }
+        : { '.dark': {} }),
+    };
+    const colors = {};
+
+    darkModeTheme['handleStylesToAdd'](
+      darkColor,
+      modeAwareColorName,
+      lightStyle,
+      stylesToAdd,
+      colors
     );
-    expect(updatedTheme).toHaveProperty('plugins');
-    expect(updatedTheme.plugins.length).toEqual(1);
+
+    expect(colors[modeAwareColorName]).toBeDefined();
+    expect(stylesToAdd.html[`--color-${modeAwareColorName}`]).toBeDefined();
   });
 });

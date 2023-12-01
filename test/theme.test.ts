@@ -1,18 +1,15 @@
-import { Config } from 'tailwindcss';
 import {
   ContrastCurve,
   createMaterialTheme,
   MaterialDynamicColors,
+  Theme,
 } from '../src';
 import { DynamicColor } from '@material/material-color-utilities';
 import fs from 'fs';
 
 //TODO complete the test
 describe('createMaterialTheme', () => {
-  let theme: {
-    colors: Record<string, string>;
-    plugins: { handler: any; config?: Partial<Config> }[];
-  };
+  let theme: Theme;
   beforeEach(() => {
     theme = createMaterialTheme({
       colors: {

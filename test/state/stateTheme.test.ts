@@ -1,7 +1,8 @@
 import { StateTheme } from '../../src';
 import { colors, result, state } from './stateTheme.stub';
-import plugin from 'tailwindcss/plugin';
+
 import { PluginAPI } from 'tailwindcss/types/config';
+import plugin from 'tailwindcss/plugin';
 
 describe('stateTheme', () => {
   let theme: StateTheme;
