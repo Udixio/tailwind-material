@@ -1,5 +1,5 @@
 # Overview
-Tailwind Material is a package designed to create Tailwind themes using Google's Material Design guidelines.
+Tailwind Material is a package designed to create Tailwind themes using Google's [Material Design](https://m3.material.io/) guidelines.
 
 ## Introduction
 Tailwind Material is an open-source package that merges the simplicity of Tailwind CSS with the elegant guidelines from Google's Material Design. It offers a wide selection of pre-crafted themes, ready for direct application in a production environment.

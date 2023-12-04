@@ -1,12 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<buildprofiles xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd"
-               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<buildprofiles xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="https://resources.jetbrains.com/writerside/1.0/build-profiles.xsd">
 
-    <variables></variables>
+    <variables>
+        <primary-color>iris</primary-color>
+    </variables>
     <build-profile instance="docs">
         <variables>
             <noindex-content>true</noindex-content>
         </variables>
     </build-profile>
+    <footer>
+        <link href="https://github.com/Udixio/tailwind-material">Github</link>
+        <copyright>Udixio 2023</copyright>
+    </footer>
 
 </buildprofiles>
