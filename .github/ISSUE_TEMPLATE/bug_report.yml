@@ -2,14 +2,16 @@ name: Bug Report
 description: File a bug report
 title: "[Bug]: "
 labels: ["bug", "triage"]
-projects: ["octo-org/1", "octo-org/44"]
-assignees:
-  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report!
+        ## :warning: We use GitHub Issues to track bug reports, feature requests and regressions
+
+        If you are not sure that your issue is a bug, use our [Discord community](https://discord.com/invite/bt2h5RCp77)
+
+        ---
+        
   - type: input
     id: contact
     attributes:
