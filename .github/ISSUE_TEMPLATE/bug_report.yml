@@ -36,10 +36,10 @@ body:
       description: |
         How the issue manifests?
         You could leave this blank if you already write this in your reproduction code
-    placeholder: |
-      1. `npm ci`
-      2. `npm start:dev`
-      3. See error...
+      placeholder: |
+        1. `npm ci`
+        2. `npm start:dev`
+        3. See error...
 
   - type: textarea
     validations:
