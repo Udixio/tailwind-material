@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        ## :warning: We use GitHub Issues to track bug reports, feature requests and regressions
+        ## :warning: We use GitHub Issues to track bug reports and feature requests
 
         If you are not sure that your issue is a bug, use our [Discord community](https://discord.com/invite/bt2h5RCp77)
 
