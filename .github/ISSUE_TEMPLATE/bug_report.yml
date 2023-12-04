@@ -12,36 +12,56 @@ body:
 
         ---
         
-
   - type: textarea
     id: what-happened
     attributes:
       label: "Current behavior"
       description: "How the issue manifests?"
     validations:
-      required: true
-      
-  - type: dropdown
-    id: version
-    attributes:
-      label: Version
-      description: What version of our software are you running?
-      options:
-        - 1.0.2 (Default)
-        - 1.0.3 (Edge)
-      default: 0
+      required: true      
+
+  - type: input
     validations:
       required: true
-  - type: dropdown
-    id: browsers
     attributes:
-      label: What browsers are you seeing the problem on?
-      multiple: true
-      options:
-        - Firefox
-        - Chrome
-        - Safari
-        - Microsoft Edge
+      label: "Minimum reproduction code"
+      description: |
+        An URL to some Git repository/[StackBlitz](https://stackblitz.com/fork/github/nestjs/typescript-starter)/[CodeSandbox](https://codesandbox.io/s/github/nestjs/typescript-starter/tree/master) project that reproduces your issue. [What is a minimum reproduction?](https://jmcdo29.github.io/wtf-is-a-minimum-reproduction)  
+        :warning: **NOTE:** We can close this issue if we don't manage to reproduce your potential bug. [Here](https://antfu.me/posts/why-reproductions-are-required) is why.
+      placeholder: "https://github.com/..."
+
+  - type: textarea
+    attributes:
+    label: "Steps to reproduce"
+    description: |
+      How the issue manifests?
+      You could leave this blank if you already write this in your reproduction code
+    placeholder: |
+      1. `npm ci`
+      2. `npm start:dev`
+      3. See error...
+
+  - type: textarea
+    validations:
+      required: true
+    attributes:
+      label: "Expected behavior"
+      description: "A clear and concise description of what you expected to happened (or code)"
+      
+  - type: input
+    attributes:
+      label: "Tailwind-material version"
+      description: |
+        Which version of `@udixio/tailwind-material` are you using?
+      placeholder: "1.0.0"
+
+  - type: input
+    attributes:
+      label: "Node.js version"
+      description: "Which version of Node.js are you using?"
+      placeholder: "14.17.6"
+
+      
   - type: textarea
     id: logs
     attributes:
