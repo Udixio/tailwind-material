@@ -21,6 +21,8 @@ body:
         required: true
 
   - type: textarea
+    validations:
+      required: true
     attributes:
       label: "Summary"
       description: "Describe how it should work."
