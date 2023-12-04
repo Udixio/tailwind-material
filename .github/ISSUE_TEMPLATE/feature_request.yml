@@ -20,32 +20,26 @@ body:
       - label: "I have searched the existing issues"
         required: true
 
+  - type: checkboxes
+    attributes:
+      label: "Latest version"
+      description: "We roll bug fixes, performance enhancements, and other improvements into new releases."
+      options:
+        - label: "I have tested the latest version"
+          required: true
+  - type: textarea
+    attributes:
+      label: Summary 💡
+      description: "Describe how it should work."
   - type: textarea
     validations:
       required: true
     attributes:
-      label: "Is your feature request related to a problem? Please describe it"
-      description: "A clear and concise description of what the problem is"
-      placeholder: |
-        I have an issue when ...
-
+      label: "Examples 🌈"
+      description: "Provide a link to the Material Design specification, other implementations, or screenshots of the expected behavior."
   - type: textarea
     validations:
       required: true
     attributes:
-      label: "Describe the solution you'd like"
-      description: "A clear and concise description of what you want to happen. Add any considered drawbacks"
-
-  - type: textarea
-    validations:
-      required: true
-    attributes:
-      label: "Teachability, documentation, adoption, migration strategy"
-      description: "If you can, explain how users will be able to use this and possibly write out a version the docs. Maybe a screenshot or design?"
-
-  - type: textarea
-    validations:
-      required: true
-    attributes:
-      label: "What is the motivation / use case for changing the behavior?"
-      description: "Describe the motivation or the concrete use case"
+      label: "Motivation 🔦"
+      description: "What are you trying to accomplish? How has the lack of this feature affected you? Providing context helps us come up with a solution that is more useful in the real world."
