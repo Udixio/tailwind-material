@@ -1,4 +1,4 @@
-name: Feature Request
+name: "Feature Request"
 description: "I have a suggestion"
 title: "[Suggest]: "
 labels: ["suggest", "triage"]
@@ -20,13 +20,6 @@ body:
       - label: "I have searched the existing issues"
         required: true
 
-  - type: checkboxes
-    attributes:
-      label: "Latest version"
-      description: "We roll bug fixes, performance enhancements, and other improvements into new releases."
-      options:
-        - label: "I have tested the latest version"
-          required: true
   - type: textarea
     attributes:
       label: Summary 💡
